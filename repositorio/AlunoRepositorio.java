@@ -9,16 +9,41 @@ import java.sql.SQLException;
 
 public class AlunoRepositorio {
 
-    public void inserir(Aluno aluno){
+    //  Chamar para saber se a tabela está criada dentro do banco de dados
+    public void criarTabelaAluno() {
+        String sql = "CREATE TABLE IF NOT EXISTS Aluno (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nome TEXT NOT NULL," +
+                "cpf TEXT NOT NULL," +
+                "data_nascimento TEXT NOT NULL," +
+                "telefone TEXT," +
+                "email TEXT," +
+                "idade INTEGER NOT NULL" +
+                ");";
 
-        String sql = "INSERT INTO Aluno(nome, idade) VALUES (?, ?)";
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.execute();
+                System.out.println("Tabela Aluno criada ou já existia.");
+        }
+        catch (SQLException e) {
+            System.out.println("Erro ao criar tabela: " + e.getMessage());
+        }
+    }
+
+    public void inserir(Aluno aluno){
+        String sql = "INSERT INTO Aluno(nome, cpf, data_nascimento, telefone, email, idade) VALUES (?, ?, ?, ?, ?, ?)";
 
 //      Tentar abrir a conexao com o banco de dados Conexao.java
         try (Connection con = Conexao.conectar();
         PreparedStatement inserirAluno = con.prepareStatement(sql)){
 //          Substitui os "?" da query pelos valores do objeto aluno
             inserirAluno.setString(1, aluno.getNome());
-            inserirAluno.setInt(2, aluno.getIdade());
+            inserirAluno.setString(2, aluno.getCpf());
+            inserirAluno.setString(3, String.valueOf(aluno.getDataNascimento()));
+            inserirAluno.setString(4, aluno.getTelefone());
+            inserirAluno.setString(5, aluno.getEmail());
+            inserirAluno.setInt(6, aluno.getIdade());
             inserirAluno.executeUpdate();
 
         } catch (SQLException e){
