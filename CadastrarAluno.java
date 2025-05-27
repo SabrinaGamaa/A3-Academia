@@ -7,8 +7,8 @@ import java.util.Formatter;
 import java.util.Scanner;
 
 public class CadastrarAluno {
-    public static void cadastrarAluno(){
-        Scanner sc = new Scanner(System.in);
+    public static void cadastrarAluno(Scanner sc){
+
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
         alunoRepositorio.criarTabelaAluno();
@@ -31,10 +31,10 @@ public class CadastrarAluno {
 
         System.out.print("Idade: ");
         int idade = sc.nextInt();
+        sc.nextLine();
 
         Aluno aluno = new Aluno(null, nome, cpf, dataNascimento, telefone, email, idade);
         alunoRepositorio.inserir(aluno);
 
-        sc.close();
     }
 }

@@ -7,7 +7,7 @@ package modelos;
 //    • Excluir um treino.
 
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Treino {
@@ -16,14 +16,17 @@ public class Treino {
     private String tipoTreino;
     private String descricao;
     private Duration duracao;
-    private LocalDate dataInicio;
+    private LocalDateTime dataInicio;
 
-    public Treino(Long id, String tipoTreino, String descricao, Duration duracao, LocalDate dataInicio) {
+    private Long alunoId;
+
+    public Treino(Long id, String tipoTreino, String descricao, Duration duracao, LocalDateTime dataInicio, Long alunoId) {
         this.id = id;
         this.tipoTreino = tipoTreino;
         this.descricao = descricao;
         this.duracao = duracao;
         this.dataInicio = dataInicio;
+        this.alunoId = alunoId;
     }
 
     public Long getId() {
@@ -58,12 +61,20 @@ public class Treino {
         this.duracao = duracao;
     }
 
-    public LocalDate getDataInicio() {
+    public LocalDateTime getDataInicio() {
         return dataInicio;
     }
 
-    public void setDataInicio(LocalDate dataInicio) {
+    public void setDataInicio(LocalDateTime dataInicio) {
         this.dataInicio = dataInicio;
+    }
+
+    public Long getAlunoId() {
+        return alunoId;
+    }
+
+    public void setAlunoId(Long alunoId) {
+        this.alunoId = alunoId;
     }
 
     @Override
