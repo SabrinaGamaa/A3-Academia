@@ -43,11 +43,11 @@ public class AlunoRepositorio {
         try (Connection con = Conexao.conectar();
         PreparedStatement inserirAluno = con.prepareStatement(sql)){
 //          Substitui os "?" da query pelos valores do objeto aluno
-            inserirAluno.setString(1, aluno.getNome());
+            inserirAluno.setString(1, aluno.getNome().toLowerCase());
             inserirAluno.setString(2, aluno.getCpf());
             inserirAluno.setString(3, String.valueOf(aluno.getDataNascimento()));
             inserirAluno.setString(4, aluno.getTelefone());
-            inserirAluno.setString(5, aluno.getEmail());
+            inserirAluno.setString(5, aluno.getEmail().toLowerCase());
             inserirAluno.setInt(6, aluno.getIdade());
             inserirAluno.executeUpdate();
 
@@ -57,7 +57,35 @@ public class AlunoRepositorio {
         }
     }
 
-    public List<Aluno> listarAluno(String nome) {
+    public List<Aluno> listarAluno() {
+        List<Aluno> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Aluno";
+
+        try (Connection con = Conexao.conectar()) {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Aluno aluno = new Aluno(
+                        rs.getLong("id"),
+                        rs.getString("nome"),
+                        rs.getString("cpf"),
+                        LocalDate.parse(rs.getString("data_nascimento"), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        rs.getString("telefone"),
+                        rs.getString("email"),
+                        rs.getInt("idade")
+                );
+                lista.add(aluno);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar os alunos: " + e);
+        }
+        return lista;
+    }
+
+
+    public List<Aluno> listarAlunoPorNome(String nome) {
         List<Aluno> lista = new ArrayList<>();
         String sql = "SELECT * FROM Aluno WHERE nome = ?";
 
