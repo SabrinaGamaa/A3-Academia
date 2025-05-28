@@ -152,8 +152,8 @@ public class AlunoRepositorio {
             int mudancas = stmt.executeUpdate();
 
             if (mudancas > 0) {
+                System.out.println(aluno.toString());
                 System.out.println("Aluno atualizado com Sucesso!");
-                aluno.toString();
             }
             else {
                 System.out.println("Nenhum aluno com esse ID.");

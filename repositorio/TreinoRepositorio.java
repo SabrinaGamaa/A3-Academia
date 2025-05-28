@@ -1,5 +1,6 @@
 package repositorio;
 
+import modelos.Aluno;
 import modelos.Treino;
 import util.Conexao;
 
@@ -92,6 +93,71 @@ public class TreinoRepositorio {
         }
 
         return lista;
+    }
+
+    public Treino listarTreinoAlunoPorId(long id) {
+        String sql = "SELECT * FROM Treino WHERE id_treino = ?";
+
+        try (Connection con = Conexao.conectar()) {
+            PreparedStatement stmt = con.prepareStatement(sql); { stmt.setLong(1, id);}
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String strDur = rs.getString("duracao");
+                String[] partes = strDur.split(" ");
+                int minutos = Integer.parseInt(partes[0]);
+                Duration duracao = Duration.ofMinutes(minutos);
+
+                return new Treino(
+                        rs.getLong("id_treino"),
+                        rs.getString("tipo_treino"),
+                        rs.getString("descricao"),
+                        duracao,
+                        LocalDateTime.parse(rs.getString("data_inicio"), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        rs.getLong("aluno_id")
+                );
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar Treino: " + e);
+        }
+
+        return null;
+    }
+
+    public void editarTreino(Treino treino) {
+        String sql = "UPDATE Treino SET aluno_id = ?, tipo_treino = ?, descricao = ?, duracao = ?, data_inicio = ? WHERE id_treino = ?";
+
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setLong(1, treino.getAlunoId());
+            stmt.setString(2, treino.getTipoTreino());
+            stmt.setString(3, treino.getDescricao());
+
+            long minutos = treino.getDuracao().toMinutes();
+            String duracaoMinutos = minutos + " minutos";
+            stmt.setString(4, duracaoMinutos);
+
+            String dataInicio= treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+            stmt.setString(5, dataInicio);
+
+            stmt.setLong(6, treino.getId());
+
+            int mudancas = stmt.executeUpdate();
+
+            if (mudancas > 0) {
+                System.out.println(treino.toString());
+                System.out.println("Treino editado com sucesso!");
+            }
+            else {
+                System.out.println("Nenhum Treino com esse ID.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error ao atualizar treino: " + e.getMessage());;
+        }
+
     }
 
 
