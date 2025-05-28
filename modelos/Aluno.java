@@ -8,6 +8,7 @@ package modelos;
 //    • Buscar aluno por nome ou CPF.
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Aluno {
@@ -96,4 +97,17 @@ public class Aluno {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return " === Aluno === " +
+                "\nID: " + id +
+                "\nNome: " + nome +
+                "\nCPF: " + cpf +
+                "\nData Nascimento: " + dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+
+                "\nTelefone: " + telefone +
+                "\nE-mail: " + email +
+                "\nIdade: " + idade;
+    }
+
 }

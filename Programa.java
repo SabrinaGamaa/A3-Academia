@@ -1,5 +1,6 @@
 import servicos.CadastrarAluno;
 import servicos.CadastrarTreino;
+import servicos.ListarAluno;
 import servicos.ListarTreinoPorAluno;
 
 import java.util.Locale;
@@ -12,7 +13,8 @@ public class Programa {
 
 //        CadastrarAluno.cadastrarAluno(sc);
 //        CadastrarTreino.cadastrarTreino(sc);
-        ListarTreinoPorAluno.listarTreinos(sc);
+//        ListarTreinoPorAluno.listarTreinos(sc);
+        ListarAluno.listarAluno(sc);
 
         sc.close();
 

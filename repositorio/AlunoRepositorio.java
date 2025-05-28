@@ -5,7 +5,12 @@ import util.Conexao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlunoRepositorio {
 
@@ -50,6 +55,35 @@ public class AlunoRepositorio {
             System.out.println("Erro ao tentar inserir o aluno: " + e.getMessage());
 
         }
-
     }
+
+    public List<Aluno> listarAluno(String nome) {
+        List<Aluno> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Aluno WHERE nome = ?";
+
+        try (Connection con = Conexao.conectar()) {
+            PreparedStatement stmt = con.prepareStatement(sql); { stmt.setString(1, nome);}
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Aluno aluno = new Aluno(
+                        rs.getLong("id"),
+                        rs.getString("nome"),
+                        rs.getString("cpf"),
+                        LocalDate.parse(rs.getString("data_nascimento"), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        rs.getString("telefone"),
+                        rs.getString("email"),
+                        rs.getInt("idade")
+                );
+                lista.add(aluno);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar Aluno: " + e);
+        }
+
+        return lista;
+    }
+
+
 }
