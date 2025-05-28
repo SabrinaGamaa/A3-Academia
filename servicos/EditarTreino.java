@@ -21,7 +21,7 @@ public class EditarTreino {
         System.out.print("Digite o ID do TREINO que deseja editar os dados: ");
         Long idTreino = Long.parseLong(sc.nextLine());
 
-        Treino treinoAntigo = treinoRepositorio.listarTreinoAlunoPorId(idTreino);
+        Treino treinoAntigo = treinoRepositorio.buscarTreinoPorId(idTreino);
         if (treinoAntigo == null) {
             System.out.println("Treino não encontrado. ");
             return;

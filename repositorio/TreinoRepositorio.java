@@ -95,7 +95,7 @@ public class TreinoRepositorio {
         return lista;
     }
 
-    public Treino listarTreinoAlunoPorId(long id) {
+    public Treino buscarTreinoPorId(long id) {
         String sql = "SELECT * FROM Treino WHERE id_treino = ?";
 
         try (Connection con = Conexao.conectar()) {
@@ -157,7 +157,22 @@ public class TreinoRepositorio {
         } catch (SQLException e) {
             System.out.println("Error ao atualizar treino: " + e.getMessage());;
         }
+    }
 
+    public boolean deletarTreino(long idTreino) {
+        String sql = "DELETE FROM Treino WHERE id_treino = ?";
+
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setLong(1, idTreino);
+            int mudanca = stmt.executeUpdate();
+            return mudanca > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar Treino: " + e.getMessage());
+            return false;
+        }
     }
 
 
