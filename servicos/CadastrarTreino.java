@@ -1,3 +1,5 @@
+package servicos;
+
 import modelos.Aluno;
 import modelos.Treino;
 import repositorio.TreinoRepositorio;
@@ -10,10 +12,12 @@ import java.util.Scanner;
 public class CadastrarTreino {
     public static void cadastrarTreino(Scanner sc){
         TreinoRepositorio TreinoRepositorio = new TreinoRepositorio();
-        Aluno aluno = new Aluno();
         TreinoRepositorio.criarTabelaTreino();
 
         System.out.println(" =-=-=-= REGISTRAR TREINO NA ACADEMIA =-=-=-= ");
+        System.out.print("ID do aluno: ");
+        Long alunoId = Long.parseLong(sc.nextLine());
+
         System.out.print("Tipo de Treino: ");
         String tipoTreino = sc.nextLine();
 
@@ -28,11 +32,10 @@ public class CadastrarTreino {
         String dataInicio= data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
         System.out.println("Data de Inicio: " + dataInicio);
 
-        System.out.println("ID do aluno: ");
-        Long alunoId = Long.parseLong(sc.nextLine());
 
-        Treino Treino = new Treino(null, tipoTreino, descricao, duracao, data, alunoId);
-        TreinoRepositorio.inserir(Treino);
-
+        Treino treino = new Treino(null, tipoTreino, descricao, duracao, data, alunoId);
+        TreinoRepositorio.inserir(treino);
     }
+
+
 }

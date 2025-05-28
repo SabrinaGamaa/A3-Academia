@@ -1,9 +1,10 @@
+package servicos;
+
 import modelos.Aluno;
 import repositorio.AlunoRepositorio;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 import java.util.Scanner;
 
 public class CadastrarAluno {

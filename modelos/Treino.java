@@ -8,6 +8,7 @@ package modelos;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Treino {
@@ -89,4 +90,15 @@ public class Treino {
         return Objects.hashCode(id);
     }
 
+    @Override
+    public String toString() {
+        return " ===== LISTA DE TREINOS =====" +
+                "\nAluno ID: " + alunoId +
+                "\nTreino ID: " + id +
+                "\nTipo: " + tipoTreino +
+                "\nDescrição: " + descricao +
+                "\nDuração: " + duracao.toMinutes() + " minutos" +
+                "\nData de Início: " + dataInicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) +
+                "\n---------------------------";
+    }
 }
