@@ -162,7 +162,22 @@ public class AlunoRepositorio {
         } catch (SQLException e) {
             System.out.println("Error ao atualizar aluno: " + e.getMessage());;
         }
+    }
 
+    public boolean deletarAluno(long id) {
+        String sql = "DELETE FROM Aluno WHERE id = ?";
+
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            int mudanca = stmt.executeUpdate();
+            return mudanca > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar Aluno: " + e.getMessage());
+            return false;
+        }
     }
 
 

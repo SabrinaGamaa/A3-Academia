@@ -30,7 +30,9 @@ public class Programa {
 
 //        EditarAluno.editarAlunoPorId(sc);
 
-        EditarTreino.editarTreinoPorId(sc);
+//        EditarTreino.editarTreinoPorId(sc);
+
+        DeletarAluno.deletarAlunoPorId(sc);
 
 
         sc.close();
