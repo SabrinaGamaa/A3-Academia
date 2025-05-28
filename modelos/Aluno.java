@@ -8,6 +8,7 @@ package modelos;
 //    • Buscar aluno por nome ou CPF.
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -19,19 +20,17 @@ public class Aluno {
     private LocalDate dataNascimento;
     private String telefone;
     private String email;
-    private int idade;
 
     public Aluno(){
     }
 
-    public Aluno(Long id, String nome, String cpf, LocalDate dataNascimento, String telefone, String email, int idade) {
+    public Aluno(Long id, String nome, String cpf, LocalDate dataNascimento, String telefone, String email) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.telefone = telefone;
         this.email = email;
-        this.idade = idade;
     }
 
     public Long getId() {
@@ -44,14 +43,6 @@ public class Aluno {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
     }
 
     public String getCpf() {
@@ -86,6 +77,10 @@ public class Aluno {
         this.email = email;
     }
 
+    public int getIdade() {
+        return Period.between(this.dataNascimento, LocalDate.now()).getYears();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -107,7 +102,7 @@ public class Aluno {
                 "\nData Nascimento: " + dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+
                 "\nTelefone: " + telefone +
                 "\nE-mail: " + email +
-                "\nIdade: " + idade;
+                "\nIdade: " + getIdade();
     }
 
 }

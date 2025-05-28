@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class ListarAlunoPorNome {
 
     public static void listarAluno(Scanner sc) {
-        System.out.println(" =-=-= LISTAR ALUNO PELO NOME =-=-= ");
+        System.out.println(" ----- LISTAR ALUNO PELO NOME ---- ");
         System.out.print("Nome do aluno: ");
         String nome = sc.nextLine().toLowerCase();
 

@@ -22,8 +22,7 @@ public class AlunoRepositorio {
                 "cpf TEXT NOT NULL," +
                 "data_nascimento TEXT NOT NULL," +
                 "telefone TEXT," +
-                "email TEXT," +
-                "idade INTEGER NOT NULL" +
+                "email TEXT" +
                 ");";
 
         try (Connection con = Conexao.conectar();
@@ -37,7 +36,7 @@ public class AlunoRepositorio {
     }
 
     public void inserir(Aluno aluno){
-        String sql = "INSERT INTO Aluno(nome, cpf, data_nascimento, telefone, email, idade) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Aluno(nome, cpf, data_nascimento, telefone, email) VALUES (?, ?, ?, ?, ?)";
 
 //      Tentar abrir a conexao com o banco de dados Conexao.java
         try (Connection con = Conexao.conectar();
@@ -48,7 +47,6 @@ public class AlunoRepositorio {
             inserirAluno.setString(3, String.valueOf(aluno.getDataNascimento()));
             inserirAluno.setString(4, aluno.getTelefone());
             inserirAluno.setString(5, aluno.getEmail().toLowerCase());
-            inserirAluno.setInt(6, aluno.getIdade());
             inserirAluno.executeUpdate();
 
         } catch (SQLException e){
@@ -72,8 +70,7 @@ public class AlunoRepositorio {
                         rs.getString("cpf"),
                         LocalDate.parse(rs.getString("data_nascimento"), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                         rs.getString("telefone"),
-                        rs.getString("email"),
-                        rs.getInt("idade")
+                        rs.getString("email")
                 );
                 lista.add(aluno);
             }
@@ -100,8 +97,7 @@ public class AlunoRepositorio {
                         rs.getString("cpf"),
                         LocalDate.parse(rs.getString("data_nascimento"), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                         rs.getString("telefone"),
-                        rs.getString("email"),
-                        rs.getInt("idade")
+                        rs.getString("email")
                 );
                 lista.add(aluno);
             }
@@ -111,6 +107,35 @@ public class AlunoRepositorio {
         }
 
         return lista;
+    }
+
+    public void editarAluno(Aluno aluno) {
+        String sql = "UPDATE Aluno SET nome = ?, cpf = ?, data_nascimento = ?, telefone = ?, email = ? WHERE id = ?";
+
+        try (Connection con = Conexao.conectar();
+            PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, aluno.getNome());
+            stmt.setString(2, aluno.getCpf());
+            stmt.setString(3, String.valueOf(aluno.getDataNascimento()));
+            stmt.setString(4, aluno.getTelefone());
+            stmt.setString(5, aluno.getEmail());
+            stmt.setLong(6, aluno.getId());
+
+            int mudancas = stmt.executeUpdate();
+
+            if (mudancas > 0) {
+                System.out.println("Aluno atualizado com Sucesso!");
+                aluno.toString();
+            }
+            else {
+                System.out.println("Nenhum aluno com esse ID.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error ao atualizar aluno: " + e.getMessage());;
+        }
+
     }
 
 

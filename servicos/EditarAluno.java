@@ -7,14 +7,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class CadastrarAluno {
-    public static void cadastrarAluno(Scanner sc){
+public class EditarAluno {
 
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public static void editarAlunoPorId(Scanner sc) {
         AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
-        alunoRepositorio.criarTabelaAluno();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        System.out.println("==== REGISTRAR ALUNO NA ACADEMIA ====");
+        System.out.println(" === Editar aluno === ");
+        System.out.print("Digite o ID do aluno que deseja editar os dados: ");
+        Long id = Long.parseLong(sc.nextLine());
+
         System.out.print("Nome: ");
         String nome = sc.nextLine();
 
@@ -30,9 +32,9 @@ public class CadastrarAluno {
         System.out.print("E-mail: ");
         String email = sc.nextLine();
 
-
-        Aluno aluno = new Aluno(null, nome, cpf, dataNascimento, telefone, email);
-        alunoRepositorio.inserir(aluno);
+        Aluno aluno = new Aluno(id, nome, cpf, dataNascimento, telefone, email);
+        alunoRepositorio.editarAluno(aluno);
 
     }
+
 }

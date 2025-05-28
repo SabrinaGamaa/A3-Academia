@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class ListarTreinoPorAluno {
 
     public static void listarTreinos(Scanner sc) {
-        System.out.println(" =-=-= LISTAR TREINO DO ALUNO =-=-= ");
+        System.out.println(" ---- LISTAR TREINO DO ALUNO ----- ");
         System.out.print("Digite o ID do aluno: ");
         long alunoId = Long.parseLong(sc.nextLine());
 
