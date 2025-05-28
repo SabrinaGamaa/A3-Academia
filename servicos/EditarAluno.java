@@ -17,20 +17,36 @@ public class EditarAluno {
         System.out.print("Digite o ID do aluno que deseja editar os dados: ");
         Long id = Long.parseLong(sc.nextLine());
 
-        System.out.print("Nome: ");
-        String nome = sc.nextLine();
+        Aluno alunoAntigo = alunoRepositorio.listarAlunoPorId(id);
+        if (alunoAntigo == null) {
+            System.out.println("Aluno não encontrado. ");
+            return;
+        }
 
-        System.out.print("CPF (sem caracter): ");
-        String cpf = sc.nextLine();
+        System.out.println("\nPressione Enter para manter os dados atuais.");
+
+        System.out.print("Nome: ");
+        String nomeDigitado = sc.nextLine();
+        String nome = nomeDigitado.isBlank() ? alunoAntigo.getNome() : nomeDigitado;
+
+        System.out.print("CPF: ");
+        String cpfDigitado = sc.nextLine();
+        String cpf = cpfDigitado.isBlank() ? alunoAntigo.getCpf() : cpfDigitado;
 
         System.out.print("Data nascimento (DD/MM/YYYY): ");
-        LocalDate dataNascimento = LocalDate.parse(sc.nextLine(), fmt);
+        String dataNascimentoDigitada = sc.nextLine();
+        LocalDate dataNascimento = dataNascimentoDigitada.isBlank()
+                ? alunoAntigo.getDataNascimento()
+                : LocalDate.parse(dataNascimentoDigitada, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         System.out.print("Telefone: ");
-        String telefone = sc.nextLine();
+        String telefoneDigitado = sc.nextLine();
+        String telefone = telefoneDigitado.isBlank() ? alunoAntigo.getTelefone() : telefoneDigitado;
 
-        System.out.print("E-mail: ");
-        String email = sc.nextLine();
+        System.out.print("Email: ");
+        String emailDigitado = sc.nextLine();
+        String email = emailDigitado.isBlank() ? alunoAntigo.getEmail() : emailDigitado;
+
 
         Aluno aluno = new Aluno(id, nome, cpf, dataNascimento, telefone, email);
         alunoRepositorio.editarAluno(aluno);

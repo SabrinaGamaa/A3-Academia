@@ -109,6 +109,33 @@ public class AlunoRepositorio {
         return lista;
     }
 
+    public Aluno listarAlunoPorId(long id) {
+        String sql = "SELECT * FROM Aluno WHERE id = ?";
+
+
+        try (Connection con = Conexao.conectar()) {
+            PreparedStatement stmt = con.prepareStatement(sql); { stmt.setLong(1, id);}
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Aluno(
+                        rs.getLong("id"),
+                        rs.getString("nome"),
+                        rs.getString("cpf"),
+                        LocalDate.parse(rs.getString("data_nascimento"), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        rs.getString("telefone"),
+                        rs.getString("email")
+                );
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar Aluno: " + e);
+        }
+
+        return null;
+    }
+
     public void editarAluno(Aluno aluno) {
         String sql = "UPDATE Aluno SET nome = ?, cpf = ?, data_nascimento = ?, telefone = ?, email = ? WHERE id = ?";
 
