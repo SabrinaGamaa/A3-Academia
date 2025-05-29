@@ -28,10 +28,9 @@ public class AlunoRepositorio {
         try (Connection con = Conexao.conectar();
              PreparedStatement stmt = con.prepareStatement(sql)) {
                 stmt.execute();
-                System.out.println("Tabela Aluno criada ou já existia.");
         }
         catch (SQLException e) {
-            System.out.println("Erro ao criar tabela: " + e.getMessage());
+            throw new RuntimeException("Erro ao criar tabela: " + e.getMessage());
         }
     }
 
@@ -50,8 +49,7 @@ public class AlunoRepositorio {
             inserirAluno.executeUpdate();
 
         } catch (SQLException e){
-            System.out.println("Erro ao tentar inserir o aluno: " + e.getMessage());
-
+            throw new RuntimeException("Erro ao inserir aluno no banco de dados: " + e.getMessage(), e);
         }
     }
 
