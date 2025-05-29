@@ -147,18 +147,18 @@ public class AlunoRepositorio {
             stmt.setString(5, aluno.getEmail());
             stmt.setLong(6, aluno.getId());
 
-            int mudancas = stmt.executeUpdate();
+            stmt.executeUpdate();
 
-            if (mudancas > 0) {
-                System.out.println(aluno.toString());
-                System.out.println("Aluno atualizado com Sucesso!");
-            }
-            else {
-                System.out.println("Nenhum aluno com esse ID.");
-            }
+//            if (mudancas > 0) {
+//                System.out.println(aluno.toString());
+//                ("Aluno atualizado com Sucesso!");
+//            }
+//            else {
+//                System.out.println("Nenhum aluno com esse ID.");
+//            }
 
         } catch (SQLException e) {
-            System.out.println("Error ao atualizar aluno: " + e.getMessage());;
+            throw new RuntimeException("Error ao atualizar aluno: " + e.getMessage());
         }
     }
 

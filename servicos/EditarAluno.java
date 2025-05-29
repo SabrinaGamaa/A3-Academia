@@ -9,43 +9,33 @@ import java.util.Scanner;
 
 public class EditarAluno {
 
-    public static void editarAlunoPorId(Scanner sc) {
+    public static void editarAlunoPorId(String idStr, String nome, String cpf, String dataNascimentoStr, String telefone, String email) {
         AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        System.out.println(" === Editar aluno === ");
-        System.out.print("Digite o ID do aluno que deseja editar os dados: ");
-        Long id = Long.parseLong(sc.nextLine());
+
+        Long id = Long.parseLong(idStr);
 
         Aluno alunoAntigo = alunoRepositorio.listarAlunoPorId(id);
         if (alunoAntigo == null) {
-            System.out.println("Aluno não encontrado. ");
-            return;
+            throw new IllegalArgumentException("Aluno não encontrado. ");
         }
 
-        System.out.println("\nPressione Enter para manter os dados atuais.");
+        nome = nome.isBlank() ? alunoAntigo.getNome() : nome;
 
-        System.out.print("Nome: ");
-        String nomeDigitado = sc.nextLine();
-        String nome = nomeDigitado.isBlank() ? alunoAntigo.getNome() : nomeDigitado;
 
-        System.out.print("CPF: ");
-        String cpfDigitado = sc.nextLine();
-        String cpf = cpfDigitado.isBlank() ? alunoAntigo.getCpf() : cpfDigitado;
+        cpf = cpf.isBlank() ? alunoAntigo.getCpf() : cpf;
+        
 
-        System.out.print("Data nascimento (DD/MM/YYYY): ");
-        String dataNascimentoDigitada = sc.nextLine();
-        LocalDate dataNascimento = dataNascimentoDigitada.isBlank()
+        LocalDate dataNascimento = dataNascimentoStr.isBlank()
                 ? alunoAntigo.getDataNascimento()
-                : LocalDate.parse(dataNascimentoDigitada, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                : LocalDate.parse(dataNascimentoStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        System.out.print("Telefone: ");
-        String telefoneDigitado = sc.nextLine();
-        String telefone = telefoneDigitado.isBlank() ? alunoAntigo.getTelefone() : telefoneDigitado;
 
-        System.out.print("Email: ");
-        String emailDigitado = sc.nextLine();
-        String email = emailDigitado.isBlank() ? alunoAntigo.getEmail() : emailDigitado;
+        telefone = telefone.isBlank() ? alunoAntigo.getTelefone() : telefone;
+
+
+        email = email.isBlank() ? alunoAntigo.getEmail() : email;
 
 
         Aluno aluno = new Aluno(id, nome, cpf, dataNascimento, telefone, email);
