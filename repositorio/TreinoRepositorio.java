@@ -31,10 +31,9 @@ public class TreinoRepositorio {
         try (Connection con = Conexao.conectar();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.execute();
-            System.out.println("Tabela Treino criada ou já existia.");
         }
         catch (SQLException e) {
-            System.out.println("Erro ao criar tabela Treino: " + e.getMessage());
+            throw new RuntimeException("Erro ao criar tabela Treino: " + e.getMessage());
         }
         
     }
@@ -59,7 +58,7 @@ public class TreinoRepositorio {
             inserirTreino.executeUpdate();
 
         } catch (SQLException e){
-            System.out.println("Erro ao tentar inserir o treino: " + e.getMessage());
+            throw new RuntimeException("Erro ao tentar inserir o treino: " + e.getMessage());
         }
     }
 

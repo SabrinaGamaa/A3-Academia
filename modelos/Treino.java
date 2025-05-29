@@ -20,6 +20,9 @@ public class Treino {
     private LocalDateTime dataInicio;
 
     private Long alunoId;
+    
+    public Treino(){
+    }
 
     public Treino(Long id, String tipoTreino, String descricao, Duration duracao, LocalDateTime dataInicio, Long alunoId) {
         this.id = id;
