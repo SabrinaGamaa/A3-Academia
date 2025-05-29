@@ -1,51 +1,38 @@
 package servicos;
 
-import modelos.Aluno;
 import modelos.Treino;
-import repositorio.AlunoRepositorio;
 import repositorio.TreinoRepositorio;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 public class EditarTreino {
 
-    public static void editarTreinoPorId(Scanner sc) {
+    public static void editarTreinoPorId(String idAlunoStr, String tipoTreino, String descricao, String duracaoStr, String dataInicioStr, String idTreinoStr ) {
         TreinoRepositorio treinoRepositorio = new TreinoRepositorio();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-        System.out.println(" === Editar Treino === ");
-        System.out.print("Digite o ID do TREINO que deseja editar os dados: ");
-        Long idTreino = Long.parseLong(sc.nextLine());
 
+        Long idTreino = Long.parseLong(idTreinoStr);
         Treino treinoAntigo = treinoRepositorio.buscarTreinoPorId(idTreino);
+        
         if (treinoAntigo == null) {
-            System.out.println("Treino não encontrado. ");
-            return;
+            throw new IllegalArgumentException("ID Treino " + idTreino + " não encontrado!");
         }
 
-        System.out.println("\nPressione Enter para manter os dados atuais.");
+        Long alunoId = idAlunoStr.isBlank() ? treinoAntigo.getAlunoId(): Long.parseLong(idAlunoStr);
 
-        System.out.print("ID do Aluno: ");
-        String idAlunoStr = sc.nextLine();
-        Long alunoId = idAlunoStr.isBlank() ? treinoAntigo.getId() : Long.parseLong(idAlunoStr);
 
-        System.out.print("Tipo de Treino: ");
-        String tipoTreinoDigitado = sc.nextLine();
-        String tipoTreino = tipoTreinoDigitado.isBlank() ? treinoAntigo.getTipoTreino() : tipoTreinoDigitado;
+        tipoTreino = tipoTreino.isBlank() ? treinoAntigo.getTipoTreino() : tipoTreino;
 
-        System.out.print("Descrição: ");
-        String descricaoDigitado = sc.nextLine();
-        String descricao = descricaoDigitado.isBlank() ? treinoAntigo.getDescricao() : descricaoDigitado;
 
-        System.out.print("Duração em minutos: ");
-        String duracaoDigitada = sc.nextLine();
-        Duration duracao = duracaoDigitada.isBlank() ? treinoAntigo.getDuracao() : Duration.ofMinutes(Long.parseLong(duracaoDigitada));
+        descricao = descricao.isBlank() ? treinoAntigo.getDescricao() : descricao;
 
-        LocalDateTime dataInicio = LocalDateTime.now();
+        Duration duracao = duracaoStr.isBlank() ? treinoAntigo.getDuracao() : Duration.ofMinutes(Long.parseLong(duracaoStr));
+
+        
+        LocalDateTime dataInicio = LocalDateTime.parse(dataInicioStr, fmt);
 
         Treino treino = new Treino(idTreino, tipoTreino, descricao, duracao, dataInicio, alunoId);
         treinoRepositorio.editarTreino(treino);

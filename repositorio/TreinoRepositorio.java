@@ -1,6 +1,5 @@
 package repositorio;
 
-import modelos.Aluno;
 import modelos.Treino;
 import util.Conexao;
 
@@ -117,8 +116,10 @@ public class TreinoRepositorio {
                 );
             }
 
+        } catch (NullPointerException e) {
+            throw new NullPointerException("ID Treino não encontrado!");
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar Treino: " + e);
+            throw new RuntimeException(e.getMessage());
         }
 
         return null;
@@ -143,18 +144,18 @@ public class TreinoRepositorio {
 
             stmt.setLong(6, treino.getId());
 
-            int mudancas = stmt.executeUpdate();
+            stmt.executeUpdate();
 
-            if (mudancas > 0) {
-                System.out.println(treino.toString());
-                System.out.println("Treino editado com sucesso!");
-            }
-            else {
-                System.out.println("Nenhum Treino com esse ID.");
-            }
+//            if (mudancas > 0) {
+//                System.out.println(treino.toString());
+//                System.out.println("Treino editado com sucesso!");
+//            }
+//            else {
+//                System.out.println("Nenhum Treino com esse ID.");
+//            }
 
         } catch (SQLException e) {
-            System.out.println("Error ao atualizar treino: " + e.getMessage());;
+            throw new RuntimeException("Error ao atualizar treino: " + e.getMessage());
         }
     }
 
