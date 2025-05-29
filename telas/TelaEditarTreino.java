@@ -218,7 +218,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
             Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));            
             JOptionPane.showMessageDialog(this, "Treino ID " + treino.getId() + " editado com sucesso!");
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao editar treino: " + e.getMessage());

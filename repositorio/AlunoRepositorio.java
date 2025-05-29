@@ -127,8 +127,11 @@ public class AlunoRepositorio {
 
             }
 
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar Aluno: " + e);
+        } catch (NullPointerException e){
+            throw new NullPointerException("ALGUM OUTRO ERRO: " + e.getMessage());
+            
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar Aluno: " + e);
         }
 
         return null;
