@@ -82,10 +82,11 @@ public class AlunoRepositorio {
 
     public List<Aluno> listarAlunoPorNome(String nome) {
         List<Aluno> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Aluno WHERE nome = ?";
+        String sql = "SELECT * FROM Aluno WHERE nome LIKE ?";
 
         try (Connection con = Conexao.conectar()) {
-            PreparedStatement stmt = con.prepareStatement(sql); { stmt.setString(1, nome);}
+           
+            PreparedStatement stmt = con.prepareStatement(sql); { stmt.setString(1, "%"+nome+"%");}
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

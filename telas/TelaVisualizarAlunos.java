@@ -5,7 +5,6 @@
 package telas;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,26 +21,14 @@ import repositorio.AlunoRepositorio;
  * @author Sabrina Gama
  */
 public class TelaVisualizarAlunos extends javax.swing.JFrame {
-
-    public void carregarAlunos() {
+    
+    public void carregarAlunos(DefaultTableModel modelo) {
+        modelo.setRowCount(0); // Limpa linhas antigas
         try {
             AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
             List<Aluno> alunos = alunoRepositorio.listarAluno();
 
-            DefaultTableModel modelo = (DefaultTableModel) tabelaAlunos.getModel();
-            modelo.setRowCount(0); // Limpa linhas antigas
-            tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-
-            DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
-            centralizado.setHorizontalAlignment(SwingConstants.CENTER);
-
-            tabelaAlunos.setBackground(new Color(245, 245, 245));
-            tabelaAlunos.setForeground(Color.DARK_GRAY);
-            tabelaAlunos.setFont(new Font("SansSerif", Font.PLAIN, 14));
-            tabelaAlunos.setRowHeight(28);
-            tabelaAlunos.setGridColor(Color.LIGHT_GRAY);
-            tabelaAlunos.setSelectionBackground(new Color(200, 230, 255));
+            
 
             for (Aluno aluno : alunos) {
                 modelo.addRow(new Object[]{
@@ -57,15 +44,73 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Erro ao carregar alunos: " + e.getMessage());
+        }
+        
     }
+    
+    
+    public void ListarAlunosPorNome(DefaultTableModel modelo) {
+        modelo.setRowCount(0); // Limpa linhas antigas
+        try {
+            String nome = txtListarAlunoNome.getText();           
+            List<Aluno> alunos = new AlunoRepositorio().listarAlunoPorNome(nome.toLowerCase());
+            
+            if (nome.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nenhum nome digitado. ");
+            }
+            
+            if (alunos.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nome não encontrado no banco de dados.");
+            }
+            
+            for (Aluno aluno : alunos) {
+                modelo.addRow(new Object[] {
+                    aluno.getId(),
+                    aluno.getNome(),
+                    aluno.getCpf(),
+                    aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    aluno.getIdade(),
+                    aluno.getTelefone(),
+                    aluno.getEmail()
+                });
+            }
+            
+                     
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar aluno: " + e.getMessage());
+        }
+        
     }
+    
+    
+    public final DefaultTableModel TelaV() {
+        DefaultTableModel modelo = (DefaultTableModel) tabelaAlunos.getModel();
+        tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+
+        tabelaAlunos.setBackground(new Color(245, 245, 245));
+        tabelaAlunos.setForeground(Color.DARK_GRAY);
+        tabelaAlunos.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        tabelaAlunos.setRowHeight(28);
+        tabelaAlunos.setGridColor(Color.LIGHT_GRAY);
+        tabelaAlunos.setSelectionBackground(new Color(200, 230, 255));
+        
+        return modelo;
+    }
+    
     
     /**
      * Creates new form TelaVisualizarAlunos
      */
-    public TelaVisualizarAlunos() {
+    public TelaVisualizarAlunos() {      
         initComponents();
-        carregarAlunos();
+        DefaultTableModel modelo = TelaV();
+        
+        carregarAlunos(modelo);
+        
     }
 
     /**
@@ -81,12 +126,12 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        txtListarAlunoNome = new javax.swing.JTextField();
+        btnListarAlunoNome = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        txtBuscarAlunoId = new javax.swing.JTextField();
+        btnBurcarAlunoId = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaAlunos = new JTable();
         btnVoltarInicial = new javax.swing.JButton();
@@ -108,8 +153,8 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         setTitle("Academia");
         setAlwaysOnTop(true);
         setBackground(new Color(255, 255, 255));
-        setPreferredSize(new Dimension(940, 630));
-        setSize(new Dimension(0, 0));
+        setPreferredSize(new java.awt.Dimension(940, 630));
+        setSize(new java.awt.Dimension(0, 0));
 
         jLabel2.setFont(new Font("SimSun", 1, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -121,14 +166,14 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         jLabel5.setFont(new Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("Nome:");
 
-        jTextField4.setFont(new Font("Tahoma", 0, 14)); // NOI18N
+        txtListarAlunoNome.setFont(new Font("Tahoma", 0, 14)); // NOI18N
 
-        jButton2.setBackground(new Color(238, 238, 238));
-        jButton2.setFont(new Font("Arial", 0, 14)); // NOI18N
-        jButton2.setText("PESQUISAR");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnListarAlunoNome.setBackground(new Color(238, 238, 238));
+        btnListarAlunoNome.setFont(new Font("Arial", 0, 14)); // NOI18N
+        btnListarAlunoNome.setText("PESQUISAR");
+        btnListarAlunoNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnListarAlunoNomeActionPerformed(evt);
             }
         });
 
@@ -142,10 +187,10 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtListarAlunoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnListarAlunoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -154,9 +199,9 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                 .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtListarAlunoNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnListarAlunoNome)
                 .addGap(12, 12, 12))
         );
 
@@ -166,14 +211,14 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         jLabel7.setFont(new Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("ID Aluno");
 
-        jTextField6.setFont(new Font("Tahoma", 0, 14)); // NOI18N
+        txtBuscarAlunoId.setFont(new Font("Tahoma", 0, 14)); // NOI18N
 
-        jButton4.setBackground(new Color(238, 238, 238));
-        jButton4.setFont(new Font("Arial", 0, 14)); // NOI18N
-        jButton4.setText("PESQUISAR");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnBurcarAlunoId.setBackground(new Color(238, 238, 238));
+        btnBurcarAlunoId.setFont(new Font("Arial", 0, 14)); // NOI18N
+        btnBurcarAlunoId.setText("PESQUISAR");
+        btnBurcarAlunoId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnBurcarAlunoIdActionPerformed(evt);
             }
         });
 
@@ -186,11 +231,11 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBuscarAlunoId, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBurcarAlunoId, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -199,9 +244,9 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtBuscarAlunoId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(btnBurcarAlunoId)
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -226,7 +271,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
             }
         });
         tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tabelaAlunos.setMinimumSize(new Dimension(0, 0));
+        tabelaAlunos.setMinimumSize(new java.awt.Dimension(0, 0));
         tabelaAlunos.setShowGrid(false);
         tabelaAlunos.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tabelaAlunos);
@@ -370,17 +415,20 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnListarAlunoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarAlunoNomeActionPerformed
+        DefaultTableModel modelo = TelaV();   
+        ListarAlunosPorNome(modelo);
+        
+    }//GEN-LAST:event_btnListarAlunoNomeActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnBurcarAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarAlunoIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnBurcarAlunoIdActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        new TelaInicial().setVisible(true);
-        this.dispose();
+        DefaultTableModel modelo = TelaV();      
+        carregarAlunos(modelo);
+
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     /**
@@ -419,9 +467,9 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBurcarAlunoId;
+    private javax.swing.JButton btnListarAlunoNome;
     private javax.swing.JButton btnVoltarInicial;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
@@ -433,8 +481,6 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JMenuItem menuCadastrarAluno;
     private javax.swing.JMenuItem menuCadastrarTreino;
     private javax.swing.JMenuItem menuDeletarAluno;
@@ -445,5 +491,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuVisualizarAlunos;
     private javax.swing.JMenuItem menuVisualizarTreinos;
     private JTable tabelaAlunos;
+    private javax.swing.JTextField txtBuscarAlunoId;
+    private javax.swing.JTextField txtListarAlunoNome;
     // End of variables declaration//GEN-END:variables
 }
