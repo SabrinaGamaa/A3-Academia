@@ -83,6 +83,38 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     }
     
     
+    public void buscarAlunoId(DefaultTableModel modelo){
+        modelo.setRowCount(0); // Limpa linhas antigas
+        try {
+            String id = txtBuscarAlunoId.getText();           
+            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(id));
+            
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nenhum ID digitado. ");
+            }           
+
+            modelo.addRow(new Object[] {
+                aluno.getId(),
+                aluno.getNome(),
+                aluno.getCpf(),
+                aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                aluno.getIdade(),
+                aluno.getTelefone(),
+                aluno.getEmail()
+            });
+            
+            
+                     
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "ID não encontrado no banco de dados.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar aluno: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+    }
+    
+    
     public final DefaultTableModel TelaV() {
         DefaultTableModel modelo = (DefaultTableModel) tabelaAlunos.getModel();
         tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -422,7 +454,8 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarAlunoNomeActionPerformed
 
     private void btnBurcarAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarAlunoIdActionPerformed
-        // TODO add your handling code here:
+        DefaultTableModel modelo = TelaV();   
+        buscarAlunoId(modelo);
     }//GEN-LAST:event_btnBurcarAlunoIdActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
