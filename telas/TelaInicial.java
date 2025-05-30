@@ -4,6 +4,11 @@
  */
 package telas;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import modelos.Aluno;
+import repositorio.AlunoRepositorio;
+
 /**
  *
  * @author Sabrina Gama
@@ -36,6 +41,10 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btnEditarTreino = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        btnDeletarAluno = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        btnVisualizarAlunos = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,6 +106,33 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel6.setText("Editar Treino");
         jLabel6.setPreferredSize(new java.awt.Dimension(100, 20));
 
+        btnDeletarAluno.setText("Deletar");
+        btnDeletarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletarAlunoActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel7.setText("Deletar Aluno");
+        jLabel7.setPreferredSize(new java.awt.Dimension(100, 20));
+
+        btnVisualizarAlunos.setText("Visualizar");
+        btnVisualizarAlunos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVisualizarAlunosActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel8.setText("Visualizar Lista de Alunos");
+        jLabel8.setMaximumSize(new java.awt.Dimension(110, 20));
+        jLabel8.setMinimumSize(new java.awt.Dimension(110, 20));
+        jLabel8.setName(""); // NOI18N
+        jLabel8.setPreferredSize(new java.awt.Dimension(120, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,11 +150,13 @@ public class TelaInicial extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnCadastrar)
-                                    .addComponent(btnEditarAluno))))
+                                    .addComponent(btnEditarAluno)
+                                    .addComponent(btnDeletarAluno))))
                         .addGap(112, 112, 112)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -127,8 +165,14 @@ public class TelaInicial extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnCadastrarTreino)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnEditarTreino))))))
-                .addContainerGap(158, Short.MAX_VALUE))
+                                    .addComponent(btnEditarTreino))))
+                        .addGap(118, 118, 118)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnVisualizarAlunos)
+                                .addGap(40, 40, 40)))))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,7 +190,11 @@ public class TelaInicial extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCadastrarTreino)))
+                        .addComponent(btnCadastrarTreino))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnVisualizarAlunos)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -157,7 +205,11 @@ public class TelaInicial extends javax.swing.JFrame {
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEditarTreino)))
-                .addContainerGap(197, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDeletarAluno)
+                .addContainerGap(130, Short.MAX_VALUE))
         );
 
         pack();
@@ -182,6 +234,18 @@ public class TelaInicial extends javax.swing.JFrame {
         new TelaEditarTreino().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnEditarTreinoActionPerformed
+
+    private void btnDeletarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarAlunoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeletarAlunoActionPerformed
+
+    private void btnVisualizarAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarAlunosActionPerformed
+        TelaVisualizarAlunos tela = new TelaVisualizarAlunos();
+        tela.setVisible(true);
+        this.dispose();
+        
+        
+    }//GEN-LAST:event_btnVisualizarAlunosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,13 +285,17 @@ public class TelaInicial extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCadastrarTreino;
+    private javax.swing.JButton btnDeletarAluno;
     private javax.swing.JButton btnEditarAluno;
     private javax.swing.JButton btnEditarTreino;
+    private javax.swing.JButton btnVisualizarAlunos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     // End of variables declaration//GEN-END:variables
 }
