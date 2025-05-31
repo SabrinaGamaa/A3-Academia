@@ -4,14 +4,9 @@
  */
 package telas;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
 import modelos.Treino;
@@ -24,30 +19,51 @@ import servicos.EditarTreino;
  * @author Sabrina Gama
  */
 public class TelaEditarTreino extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form TelaCadastrarAluno
      */
     public TelaEditarTreino() {
         initComponents();
+        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
+        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
+        telaCadastrarTreino.listarTreinos(modelo);
     }
     
-    public final DefaultTableModel TelaV() {
-        DefaultTableModel modelo = (DefaultTableModel) tabelaTreinos.getModel();
-        tabelaTreinos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    
+    public void listarTreinoPorId(DefaultTableModel modelo){
+        modelo.setRowCount(0); // Limpa linhas antigas
+        try {
+            String idTreino = txtIdTreino.getText();
+            if (idTreino.isEmpty()){
+                JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
+                return;
+            }
 
+            Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
 
-        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
-        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
-
-        tabelaTreinos.setBackground(new Color(245, 245, 245));
-        tabelaTreinos.setForeground(Color.DARK_GRAY);
-        tabelaTreinos.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        tabelaTreinos.setRowHeight(28);
-        tabelaTreinos.setGridColor(Color.LIGHT_GRAY);
-        tabelaTreinos.setSelectionBackground(new Color(200, 230, 255));
-        
-        return modelo;
+            if (treino == null){
+                throw new Exception("ID Treino não encontrado.");
+            }
+            
+            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
+                    
+            modelo.addRow(new Object[] {
+                treino.getId(),
+                treino.getAlunoId(),
+                aluno.getNome(),
+                treino.getTipoTreino(),
+                treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                treino.getDescricao()
+            });
+             
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "ID treino não encontrado no banco de dados.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     
 
@@ -81,7 +97,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         editarTreino = new javax.swing.JButton();
         btnVoltarInicial = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tabelaTreinos = new JTable();
+        tabelaTreinos = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuCadastrarAluno = new javax.swing.JMenuItem();
@@ -100,13 +116,13 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setPreferredSize(new java.awt.Dimension(940, 630));
 
-        jLabel2.setFont(new Font("SimSun", 1, 24)); // NOI18N
-        jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel2.setFont(new java.awt.Font("SimSun", 1, 24)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("==== EDITAR TREINO ====");
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar Treino do Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Arial", 0, 15))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar Treino do Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 15))); // NOI18N
 
-        txtIdTreino.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtIdTreino.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -115,34 +131,34 @@ public class TelaEditarTreino extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("ID treino");
 
-        jLabel10.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel10.setText("ID Aluno");
 
-        txtIdAluno.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtIdAluno.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel3.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Tipo de Treino");
 
-        txtTipoTreino.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtTipoTreino.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel4.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Duração (em Minutos)");
 
-        txtDuracao.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtDuracao.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        txtDataInicio.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtDataInicio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel5.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Data de Inicio do Treino");
 
-        jLabel9.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setText("Descrição");
 
         txtDescricao.setColumns(20);
-        txtDescricao.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtDescricao.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtDescricao.setRows(5);
         jScrollPane1.setViewportView(txtDescricao);
 
@@ -151,7 +167,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(txtIdTreino, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,8 +184,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +218,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        editarTreino.setFont(new Font("Arial", 1, 14)); // NOI18N
+        editarTreino.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         editarTreino.setText("EDITAR");
         editarTreino.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -211,7 +226,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
             }
         });
 
-        btnVoltarInicial.setFont(new Font("Arial", 1, 14)); // NOI18N
+        btnVoltarInicial.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnVoltarInicial.setText("VOLTAR");
         btnVoltarInicial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -219,7 +234,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
             }
         });
 
-        tabelaTreinos.setFont(new Font("Segoe UI Semibold", 1, 14)); // NOI18N
+        tabelaTreinos.setFont(new java.awt.Font("Segoe UI Semibold", 1, 14)); // NOI18N
         tabelaTreinos.setModel(new DefaultTableModel(
             new Object [][] {
 
@@ -236,7 +251,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        tabelaTreinos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tabelaTreinos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tabelaTreinos.setMinimumSize(new java.awt.Dimension(0, 0));
         tabelaTreinos.setShowGrid(false);
         tabelaTreinos.setShowHorizontalLines(true);
@@ -269,7 +284,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(24, 24, 24)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -298,17 +313,17 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         });
 
         menuCadastrarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        menuCadastrarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuCadastrarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuCadastrarAluno.setText("Cadastrar Aluno");
         jMenu1.add(menuCadastrarAluno);
 
         menuEditarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        menuEditarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuEditarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuEditarAluno.setText("Editar Aluno");
         jMenu1.add(menuEditarAluno);
 
         menuDeletarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
-        menuDeletarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuDeletarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuDeletarAluno.setText("Deletar Aluno");
         menuDeletarAluno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -360,7 +375,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
         );
 
         pack();
@@ -374,41 +389,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1ActionPerformed
 
-    public void listarTreino(){
-        DefaultTableModel modelo = TelaV();
-        modelo.setRowCount(0); // Limpa linhas antigas
-        try {
-            String idTreino = txtIdTreino.getText();
-            if (idTreino.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
-                return;
-            }
-
-            Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
-
-            if (treino == null){
-                throw new Exception("ID Treino não encontrado.");
-            }
-            
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                    
-            modelo.addRow(new Object[] {
-                treino.getId(),
-                treino.getAlunoId(),
-                aluno.getNome(),
-                treino.getTipoTreino(),
-                treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                treino.getDescricao()
-            });
-             
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "ID treino não encontrado no banco de dados.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+    
     
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         try {
@@ -443,7 +424,10 @@ public class TelaEditarTreino extends javax.swing.JFrame {
             txtDataInicio.setText(dataStr);
             txtDataInicio.setEnabled(true);
             
-            listarTreino();
+            TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
+            DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
+            listarTreinoPorId(modelo);
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
@@ -466,8 +450,11 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         try {
             EditarTreino.editarTreinoPorId(idAluno, tipoTreino, descricao, duracao, dataInicio, idTreino);
             Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
-            JOptionPane.showMessageDialog(this, "Treino ID " + treino.getId() + " editado com sucesso!");          
-            listarTreino();
+            JOptionPane.showMessageDialog(this, "Treino ID " + treino.getId() + " editado com sucesso!");   
+            
+            TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
+            DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
+            telaCadastrarTreino.listarTreinos(modelo);
             
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -549,7 +536,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
     private javax.swing.JMenu menuInicio;
     private javax.swing.JMenuItem menuVisualizarAlunos;
     private javax.swing.JMenuItem menuVisualizarTreinos;
-    private JTable tabelaTreinos;
+    private javax.swing.JTable tabelaTreinos;
     private javax.swing.JTextField txtDataInicio;
     private javax.swing.JTextArea txtDescricao;
     private javax.swing.JTextField txtDuracao;

@@ -32,7 +32,7 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         txtDataInicio.setText(dataStr);
     }
     
-    public final DefaultTableModel TelaV() {
+    public final DefaultTableModel TelaV(JTable tabelaTreinos) {
         DefaultTableModel modelo = (DefaultTableModel) tabelaTreinos.getModel();
         tabelaTreinos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
@@ -50,8 +50,7 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         return modelo;
     }
     
-    public final void listarTreino(){
-        DefaultTableModel modelo = TelaV();
+    public final void listarTreinos(DefaultTableModel modelo){       
         modelo.setRowCount(0); // Limpa linhas antigas
         try {
 
@@ -74,6 +73,8 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
                     return;
                 }
             }
+
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
             e.printStackTrace();
@@ -86,8 +87,9 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
      */
     public TelaCadastrarTreino() {
         initComponents();
+        DefaultTableModel modelo = TelaV(tabelaTreinos);
+        listarTreinos(modelo);
         carregarData();
-        listarTreino();
     }
     
 
@@ -426,7 +428,9 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         try {
             CadastrarTreino.cadastrarTreino(alunoId, tipoTreino, descricao, duracao);
             JOptionPane.showMessageDialog(this, "Treino para o ID aluno " + alunoId + " cadastrado com sucesso!");
-            listarTreino();
+            
+            DefaultTableModel modelo = TelaV(tabelaTreinos);
+            listarTreinos(modelo);
             
         }
         catch (Exception e) {
