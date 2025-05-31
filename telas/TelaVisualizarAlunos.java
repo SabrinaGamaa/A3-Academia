@@ -22,7 +22,7 @@ import repositorio.AlunoRepositorio;
  */
 public class TelaVisualizarAlunos extends javax.swing.JFrame {
     
-    public void carregarAlunos(DefaultTableModel modelo) {
+    public void carregarAlunos (DefaultTableModel modelo) {
         modelo.setRowCount(0); // Limpa linhas antigas
         try {
             AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
@@ -42,9 +42,9 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                 });
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Erro ao carregar alunos: " + e.getMessage());
-        }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar alunos: " + e.getMessage());
+            }
         
     }
     
@@ -115,7 +115,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     }
     
     
-    public final DefaultTableModel TelaV() {
+    public final DefaultTableModel TelaV(JTable tabelaAlunos) {
         DefaultTableModel modelo = (DefaultTableModel) tabelaAlunos.getModel();
         tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
@@ -139,7 +139,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
      */
     public TelaVisualizarAlunos() {      
         initComponents();
-        DefaultTableModel modelo = TelaV();
+        DefaultTableModel modelo = TelaV(tabelaAlunos);
         
         carregarAlunos(modelo);
         
@@ -448,18 +448,18 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void btnListarAlunoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarAlunoNomeActionPerformed
-        DefaultTableModel modelo = TelaV();   
+        DefaultTableModel modelo = TelaV(tabelaAlunos);   
         ListarAlunosPorNome(modelo);
         
     }//GEN-LAST:event_btnListarAlunoNomeActionPerformed
 
     private void btnBurcarAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarAlunoIdActionPerformed
-        DefaultTableModel modelo = TelaV();   
+        DefaultTableModel modelo = TelaV(tabelaAlunos);   
         buscarAlunoId(modelo);
     }//GEN-LAST:event_btnBurcarAlunoIdActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        DefaultTableModel modelo = TelaV();      
+        DefaultTableModel modelo = TelaV(tabelaAlunos);      
         carregarAlunos(modelo);
 
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
