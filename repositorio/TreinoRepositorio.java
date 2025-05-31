@@ -92,6 +92,38 @@ public class TreinoRepositorio {
 
         return lista;
     }
+    
+    public List<Treino> listarTreinoAlunos() {
+        List<Treino> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Treino";
+
+        try (Connection con = Conexao.conectar()) {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String strDur = rs.getString("duracao");
+                String[] partes = strDur.split(" ");
+                int minutos = Integer.parseInt(partes[0]);
+                Duration duracao = Duration.ofMinutes(minutos);
+
+                Treino treino = new Treino(
+                        rs.getLong("id_treino"),
+                        rs.getString("tipo_treino"),
+                        rs.getString("descricao"),
+                        duracao,
+                        LocalDateTime.parse(rs.getString("data_inicio"), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        rs.getLong("aluno_id")
+                );
+                lista.add(treino);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar Treino: " + e.getMessage());
+        }
+
+        return lista;
+    }
 
     public Treino buscarTreinoPorId(long id) {
         String sql = "SELECT * FROM Treino WHERE id_treino = ?";
