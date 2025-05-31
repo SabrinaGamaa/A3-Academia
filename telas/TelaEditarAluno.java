@@ -4,15 +4,9 @@
  */
 package telas;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
 import repositorio.AlunoRepositorio;
@@ -29,52 +23,11 @@ public class TelaEditarAluno extends javax.swing.JFrame {
      */
     public TelaEditarAluno() {
         initComponents();
+        TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
+        DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
+        telaVisualizarAlunos.carregarAlunos(modelo);
     }
-    
-    public final DefaultTableModel TelaV() {
-        DefaultTableModel modelo = (DefaultTableModel) tabelaAlunos.getModel();
-        tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-
-        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
-        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
-
-        tabelaAlunos.setBackground(new Color(245, 245, 245));
-        tabelaAlunos.setForeground(Color.DARK_GRAY);
-        tabelaAlunos.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        tabelaAlunos.setRowHeight(28);
-        tabelaAlunos.setGridColor(Color.LIGHT_GRAY);
-        tabelaAlunos.setSelectionBackground(new Color(200, 230, 255));
-        
-        return modelo;
-        
-    }
-    
-    public void carregarAlunos (DefaultTableModel modelo) {
-        modelo.setRowCount(0); // Limpa linhas antigas
-        try {
-            AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
-            List<Aluno> alunos = alunoRepositorio.listarAluno();
-
-            
-
-            for (Aluno aluno : alunos) {
-                modelo.addRow(new Object[]{
-                    aluno.getId(),
-                    aluno.getNome(),
-                    aluno.getCpf(),
-                    aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    aluno.getIdade(),
-                    aluno.getTelefone(),
-                    aluno.getEmail()
-                });
-        }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar alunos: " + e.getMessage());
-            }
-        
-    }
+   
     
     public void buscarAlunoId(DefaultTableModel modelo){
         modelo.setRowCount(0); // Limpa linhas antigas
@@ -135,7 +88,7 @@ public class TelaEditarAluno extends javax.swing.JFrame {
         editarAluno = new javax.swing.JButton();
         btnVoltarInicial = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaAlunos = new JTable();
+        tabelaAlunos = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuCadastrarAluno = new javax.swing.JMenuItem();
@@ -154,16 +107,16 @@ public class TelaEditarAluno extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(940, 630));
         setSize(new java.awt.Dimension(0, 0));
 
-        jLabel1.setFont(new Font("SimSun", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel1.setFont(new java.awt.Font("SimSun", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("==== EDITAR ALUNO ====");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Arial", 0, 15))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 15))); // NOI18N
         jPanel2.setPreferredSize(new java.awt.Dimension(315, 411));
 
-        txtIdAluno.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtIdAluno.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel7.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("ID aluno");
 
         btnBuscarAluno.setText("Buscar");
@@ -173,34 +126,34 @@ public class TelaEditarAluno extends javax.swing.JFrame {
             }
         });
 
-        txtNome.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtNome.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomeActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setText("Nome Completo");
 
-        txtCPF.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtCPF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel3.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("CPF ");
 
-        txtDataNascimento.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtDataNascimento.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel6.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel6.setText("Data nascimento (DD/MM/YYYY)");
 
-        txtTelefone.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtTelefone.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel4.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Telefone");
 
-        txtEmail.setFont(new Font("Arial", 0, 14)); // NOI18N
+        txtEmail.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        jLabel5.setFont(new Font("Arial", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("E-mail");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -260,7 +213,7 @@ public class TelaEditarAluno extends javax.swing.JFrame {
                 .addContainerGap(80, Short.MAX_VALUE))
         );
 
-        editarAluno.setFont(new Font("Arial", 1, 14)); // NOI18N
+        editarAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         editarAluno.setText("SALVAR");
         editarAluno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -268,7 +221,7 @@ public class TelaEditarAluno extends javax.swing.JFrame {
             }
         });
 
-        btnVoltarInicial.setFont(new Font("Arial", 1, 14)); // NOI18N
+        btnVoltarInicial.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnVoltarInicial.setText("VOLTAR");
         btnVoltarInicial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -276,7 +229,7 @@ public class TelaEditarAluno extends javax.swing.JFrame {
             }
         });
 
-        tabelaAlunos.setFont(new Font("Segoe UI Semibold", 1, 14)); // NOI18N
+        tabelaAlunos.setFont(new java.awt.Font("Segoe UI Semibold", 1, 14)); // NOI18N
         tabelaAlunos.setModel(new DefaultTableModel(
             new Object [][] {
 
@@ -293,7 +246,7 @@ public class TelaEditarAluno extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tabelaAlunos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tabelaAlunos.setMinimumSize(new java.awt.Dimension(0, 0));
         tabelaAlunos.setShowGrid(false);
         tabelaAlunos.setShowHorizontalLines(true);
@@ -349,17 +302,17 @@ public class TelaEditarAluno extends javax.swing.JFrame {
         });
 
         menuCadastrarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        menuCadastrarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuCadastrarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuCadastrarAluno.setText("Cadastrar Aluno");
         jMenu1.add(menuCadastrarAluno);
 
         menuEditarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        menuEditarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuEditarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuEditarAluno.setText("Editar Aluno");
         jMenu1.add(menuEditarAluno);
 
         menuDeletarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
-        menuDeletarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuDeletarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuDeletarAluno.setText("Deletar Aluno");
         menuDeletarAluno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -456,7 +409,8 @@ public class TelaEditarAluno extends javax.swing.JFrame {
             txtDataNascimento.setText(dataStr);
             txtDataNascimento.setEnabled(true);
             
-            buscarAlunoId(TelaV());
+            DefaultTableModel modelo = new TelaVisualizarAlunos().TelaV(tabelaAlunos);
+            buscarAlunoId(modelo);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -484,7 +438,9 @@ public class TelaEditarAluno extends javax.swing.JFrame {
             Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
             JOptionPane.showMessageDialog(this, "Aluno ID: " + aluno.getId() + " com o nome " + aluno.getNome().toUpperCase() + " editado com sucesso!");
 
-            buscarAlunoId(TelaV());
+            DefaultTableModel modelo = new TelaVisualizarAlunos().TelaV(tabelaAlunos);
+            buscarAlunoId(modelo);
+            
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -561,7 +517,7 @@ public class TelaEditarAluno extends javax.swing.JFrame {
     private javax.swing.JMenu menuInicio;
     private javax.swing.JMenuItem menuVisualizarAlunos;
     private javax.swing.JMenuItem menuVisualizarTreinos;
-    private JTable tabelaAlunos;
+    private javax.swing.JTable tabelaAlunos;
     private javax.swing.JTextField txtCPF;
     private javax.swing.JTextField txtDataNascimento;
     private javax.swing.JTextField txtEmail;
