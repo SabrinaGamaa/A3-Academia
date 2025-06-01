@@ -87,7 +87,7 @@ public class TreinoRepositorio {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar Treino: " + e);
+            throw new RuntimeException(e.getMessage());
         }
 
         return lista;
@@ -119,7 +119,40 @@ public class TreinoRepositorio {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar Treino: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return lista;
+    }
+    
+    public List<Treino> listarTreinoAlunoPorNome(String nomeStr) {
+        List<Treino> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Treino JOIN Aluno ON Treino.aluno_id = Aluno.id WHERE Aluno.nome LIKE ?";
+
+        try (Connection con = Conexao.conectar()) {
+            String nome = nomeStr.toLowerCase();
+            PreparedStatement stmt = con.prepareStatement(sql); { stmt.setString(1,"%"+nome+"%");}
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String strDur = rs.getString("duracao");
+                String[] partes = strDur.split(" ");
+                int minutos = Integer.parseInt(partes[0]);
+                Duration duracao = Duration.ofMinutes(minutos);
+
+                Treino treino = new Treino(
+                        rs.getLong("id_treino"),
+                        rs.getString("tipo_treino"),
+                        rs.getString("descricao"),
+                        duracao,
+                        LocalDateTime.parse(rs.getString("data_inicio"), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        rs.getLong("aluno_id")
+                );
+                lista.add(treino);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Falha ao carregar buscar banco de dados. " + e);
         }
 
         return lista;

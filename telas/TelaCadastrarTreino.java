@@ -70,7 +70,15 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
                     });
                 }
                 else {
-                    return;
+                    modelo.addRow(new Object[] {
+                        treino.getId(),
+                        treino.getAlunoId(),
+                        null,
+                        treino.getTipoTreino(),
+                        treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                        treino.getDescricao()
+                    });
                 }
             }
 
@@ -80,6 +88,9 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    
+    
+    
     
     
     /**
@@ -120,26 +131,27 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         cadastrarTreino = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabelaTreinos = new JTable();
+        btnInicial = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuCadastrarAluno = new javax.swing.JMenuItem();
         menuEditarAluno = new javax.swing.JMenuItem();
         menuDeletarAluno = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        menuCadastrarTreino = new javax.swing.JMenuItem();
         menuEditarTreino = new javax.swing.JMenuItem();
         menuDeletarTreino = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         menuVisualizarAlunos = new javax.swing.JMenuItem();
         menuVisualizarTreinos = new javax.swing.JMenuItem();
-        menuInicio = new javax.swing.JMenu();
+        jMenu6 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(940, 630));
+        setTitle("WORKOUT ALUNOS");
 
         jPanel1.setPreferredSize(new java.awt.Dimension(807, 600));
 
-        jLabel7.setFont(new Font("SimSun", 1, 24)); // NOI18N
+        jLabel7.setFont(new Font("SimSun", 1, 36)); // NOI18N
         jLabel7.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel7.setText("==== REGISTRAR TREINO DO ALUNO ====");
 
@@ -222,8 +234,8 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addGap(1, 1, 1)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                .addGap(68, 68, 68)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -239,6 +251,7 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         });
 
         cadastrarTreino.setFont(new Font("Arial", 1, 14)); // NOI18N
+        cadastrarTreino.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/salve-.png"))); // NOI18N
         cadastrarTreino.setText("SALVAR");
         cadastrarTreino.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -278,24 +291,33 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
             tabelaTreinos.getColumnModel().getColumn(6).setPreferredWidth(150);
         }
 
+        btnInicial.setFont(new Font("Arial", 1, 14)); // NOI18N
+        btnInicial.setText("INICIO");
+        btnInicial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicialActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(btnVoltarInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cadastrarTreino, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(26, 26, 26)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                 .addGap(16, 16, 16))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(btnVoltarInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cadastrarTreino, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,7 +333,8 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltarInicial)
-                    .addComponent(cadastrarTreino))
+                    .addComponent(cadastrarTreino)
+                    .addComponent(btnInicial))
                 .addGap(0, 43, Short.MAX_VALUE))
         );
 
@@ -325,11 +348,21 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         menuCadastrarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         menuCadastrarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
         menuCadastrarAluno.setText("Cadastrar Aluno");
+        menuCadastrarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadastrarAlunoActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuCadastrarAluno);
 
         menuEditarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         menuEditarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
         menuEditarAluno.setText("Editar Aluno");
+        menuEditarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditarAlunoActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuEditarAluno);
 
         menuDeletarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
@@ -346,16 +379,22 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
 
         jMenu2.setText("Treino");
 
-        menuCadastrarTreino.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
-        menuCadastrarTreino.setText("Cadastrar Treino");
-        jMenu2.add(menuCadastrarTreino);
-
         menuEditarTreino.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
         menuEditarTreino.setText("Editar Treino");
+        menuEditarTreino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditarTreinoActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuEditarTreino);
 
         menuDeletarTreino.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
         menuDeletarTreino.setText("Deletar Treino");
+        menuDeletarTreino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDeletarTreinoActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuDeletarTreino);
 
         jMenuBar1.add(jMenu2);
@@ -364,16 +403,36 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
 
         menuVisualizarAlunos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0));
         menuVisualizarAlunos.setText("Visualizar Alunos");
+        menuVisualizarAlunos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuVisualizarAlunosActionPerformed(evt);
+            }
+        });
         jMenu3.add(menuVisualizarAlunos);
 
         menuVisualizarTreinos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
         menuVisualizarTreinos.setText("Visualizar Treinos");
+        menuVisualizarTreinos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuVisualizarTreinosActionPerformed(evt);
+            }
+        });
         jMenu3.add(menuVisualizarTreinos);
 
         jMenuBar1.add(jMenu3);
 
-        menuInicio.setText("Inicio");
-        jMenuBar1.add(menuInicio);
+        jMenu6.setText("Inicio");
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0));
+        jMenuItem3.setText("Inicio");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu6);
 
         setJMenuBar(jMenuBar1);
 
@@ -389,23 +448,17 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void menuDeletarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarAlunoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuDeletarAlunoActionPerformed
-
-    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void txtAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlunoIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAlunoIdActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        new TelaInicial().setVisible(true);
-        this.dispose();
+        DefaultTableModel modelo = TelaV(tabelaTreinos);
+        listarTreinos(modelo);
+        carregarData();
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     private void cadastrarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarTreinoActionPerformed
@@ -437,6 +490,58 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao cadastrar treino: " + e.getMessage());
         }
     }//GEN-LAST:event_cadastrarTreinoActionPerformed
+
+    private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed
+        new TelaCadastrarAluno().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuCadastrarAlunoActionPerformed
+
+    private void menuEditarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarAlunoActionPerformed
+        new TelaEditarAluno().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuEditarAlunoActionPerformed
+
+    private void menuDeletarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarAlunoActionPerformed
+        new TelaExcluirAluno().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuDeletarAlunoActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void menuEditarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarTreinoActionPerformed
+        new TelaEditarTreino().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuEditarTreinoActionPerformed
+
+    private void menuVisualizarAlunosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVisualizarAlunosActionPerformed
+        new TelaVisualizarAlunos().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuVisualizarAlunosActionPerformed
+
+    private void menuVisualizarTreinosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVisualizarTreinosActionPerformed
+        new TelaVisualizarTreinos().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuVisualizarTreinosActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        new TelaInicial().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void menuDeletarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarTreinoActionPerformed
+        new TelaExcluirTreino().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuDeletarTreinoActionPerformed
+
+    private void btnInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicialActionPerformed
+        new TelaInicial().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInicialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -475,6 +580,7 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInicial;
     private javax.swing.JButton btnVoltarInicial;
     private javax.swing.JButton cadastrarTreino;
     private javax.swing.JLabel jLabel2;
@@ -486,18 +592,18 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JMenuItem menuCadastrarAluno;
-    private javax.swing.JMenuItem menuCadastrarTreino;
     private javax.swing.JMenuItem menuDeletarAluno;
     private javax.swing.JMenuItem menuDeletarTreino;
     private javax.swing.JMenuItem menuEditarAluno;
     private javax.swing.JMenuItem menuEditarTreino;
-    private javax.swing.JMenu menuInicio;
     private javax.swing.JMenuItem menuVisualizarAlunos;
     private javax.swing.JMenuItem menuVisualizarTreinos;
     private JTable tabelaTreinos;

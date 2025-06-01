@@ -167,6 +167,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaAlunos = new JTable();
         btnVoltarInicial = new javax.swing.JButton();
+        btnVoltarInicial1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuCadastrarAluno = new javax.swing.JMenuItem();
@@ -177,20 +178,20 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         menuEditarTreino = new javax.swing.JMenuItem();
         menuDeletarTreino = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        menuVisualizarAlunos = new javax.swing.JMenuItem();
         menuVisualizarTreinos = new javax.swing.JMenuItem();
-        menuInicio = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Academia");
+        setTitle("WORKOUT");
         setAlwaysOnTop(true);
         setBackground(new Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(940, 630));
         setSize(new java.awt.Dimension(0, 0));
 
-        jLabel2.setFont(new Font("SimSun", 1, 24)); // NOI18N
+        jLabel2.setFont(new Font("SimSun", 1, 36)); // NOI18N
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel2.setText("ACADEMIA TOP ONE");
+        jLabel2.setText("ACADEMIA WORKOUT");
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Aluno Por Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 0, 15))); // NOI18N
         jPanel3.setToolTipText("");
@@ -202,6 +203,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
 
         btnListarAlunoNome.setBackground(new Color(238, 238, 238));
         btnListarAlunoNome.setFont(new Font("Arial", 0, 14)); // NOI18N
+        btnListarAlunoNome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/visualizar.png"))); // NOI18N
         btnListarAlunoNome.setText("PESQUISAR");
         btnListarAlunoNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -247,6 +249,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
 
         btnBurcarAlunoId.setBackground(new Color(238, 238, 238));
         btnBurcarAlunoId.setFont(new Font("Arial", 0, 14)); // NOI18N
+        btnBurcarAlunoId.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/visualizar.png"))); // NOI18N
         btnBurcarAlunoId.setText("PESQUISAR");
         btnBurcarAlunoId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -325,6 +328,14 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
             }
         });
 
+        btnVoltarInicial1.setFont(new Font("Arial", 1, 14)); // NOI18N
+        btnVoltarInicial1.setText("INICIO");
+        btnVoltarInicial1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarInicial1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -340,6 +351,8 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVoltarInicial1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnVoltarInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
         );
@@ -357,7 +370,9 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnVoltarInicial)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnVoltarInicial)
+                    .addComponent(btnVoltarInicial1))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -371,11 +386,21 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         menuCadastrarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         menuCadastrarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
         menuCadastrarAluno.setText("Cadastrar Aluno");
+        menuCadastrarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadastrarAlunoActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuCadastrarAluno);
 
         menuEditarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         menuEditarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
         menuEditarAluno.setText("Editar Aluno");
+        menuEditarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditarAlunoActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuEditarAluno);
 
         menuDeletarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
@@ -394,32 +419,58 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
 
         menuCadastrarTreino.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         menuCadastrarTreino.setText("Cadastrar Treino");
+        menuCadastrarTreino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadastrarTreinoActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuCadastrarTreino);
 
         menuEditarTreino.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
         menuEditarTreino.setText("Editar Treino");
+        menuEditarTreino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditarTreinoActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuEditarTreino);
 
         menuDeletarTreino.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
         menuDeletarTreino.setText("Deletar Treino");
+        menuDeletarTreino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDeletarTreinoActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuDeletarTreino);
 
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Visualizar");
 
-        menuVisualizarAlunos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0));
-        menuVisualizarAlunos.setText("Visualizar Alunos");
-        jMenu3.add(menuVisualizarAlunos);
-
         menuVisualizarTreinos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
         menuVisualizarTreinos.setText("Visualizar Treinos");
+        menuVisualizarTreinos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuVisualizarTreinosActionPerformed(evt);
+            }
+        });
         jMenu3.add(menuVisualizarTreinos);
 
         jMenuBar1.add(jMenu3);
 
-        menuInicio.setText("Inicio");
-        jMenuBar1.add(menuInicio);
+        jMenu4.setText("Inicio");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0));
+        jMenuItem1.setText("Inicio");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -437,15 +488,8 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void menuDeletarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarAlunoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuDeletarAlunoActionPerformed
-
-    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void btnListarAlunoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarAlunoNomeActionPerformed
         DefaultTableModel modelo = TelaV(tabelaAlunos);   
@@ -463,6 +507,59 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         carregarAlunos(modelo);
 
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
+
+    private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed
+        new TelaCadastrarAluno().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuCadastrarAlunoActionPerformed
+
+    private void menuEditarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarAlunoActionPerformed
+        new TelaEditarAluno().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuEditarAlunoActionPerformed
+
+    private void menuDeletarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarAlunoActionPerformed
+        new TelaExcluirAluno().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuDeletarAlunoActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void menuCadastrarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarTreinoActionPerformed
+        new TelaCadastrarTreino().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuCadastrarTreinoActionPerformed
+
+    private void menuEditarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarTreinoActionPerformed
+        new TelaEditarTreino().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuEditarTreinoActionPerformed
+
+    private void menuVisualizarTreinosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVisualizarTreinosActionPerformed
+        new TelaVisualizarTreinos().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuVisualizarTreinosActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new TelaInicial().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void menuDeletarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarTreinoActionPerformed
+        new TelaExcluirTreino().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuDeletarTreinoActionPerformed
+
+    private void btnVoltarInicial1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicial1ActionPerformed
+        new TelaInicial().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnVoltarInicial1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -503,13 +600,16 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     private javax.swing.JButton btnBurcarAlunoId;
     private javax.swing.JButton btnListarAlunoNome;
     private javax.swing.JButton btnVoltarInicial;
+    private javax.swing.JButton btnVoltarInicial1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
@@ -520,8 +620,6 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuDeletarTreino;
     private javax.swing.JMenuItem menuEditarAluno;
     private javax.swing.JMenuItem menuEditarTreino;
-    private javax.swing.JMenu menuInicio;
-    private javax.swing.JMenuItem menuVisualizarAlunos;
     private javax.swing.JMenuItem menuVisualizarTreinos;
     private JTable tabelaAlunos;
     private javax.swing.JTextField txtBuscarAlunoId;

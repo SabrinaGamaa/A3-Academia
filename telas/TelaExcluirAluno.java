@@ -4,27 +4,61 @@
  */
 package telas;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import servicos.CadastrarAluno;
+import modelos.Aluno;
+import repositorio.AlunoRepositorio;
+import servicos.EditarAluno;
 
 /**
  *
  * @author Sabrina Gama
  */
-public class TelaCadastrarAluno extends javax.swing.JFrame {
+public class TelaExcluirAluno extends javax.swing.JFrame {
+
     /**
      * Creates new form TelaCadastrarAluno
      */
-    public TelaCadastrarAluno() {
+    public TelaExcluirAluno() {
         initComponents();
-        TelaVisualizarAlunos carregar = new TelaVisualizarAlunos();
-        DefaultTableModel modelo = carregar.TelaV(tabelaAlunos);
-        carregar.carregarAlunos(modelo);
+        TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
+        DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
+        telaVisualizarAlunos.carregarAlunos(modelo);
     }
+   
     
-    
-    
+    public void buscarAlunoId(DefaultTableModel modelo){
+        modelo.setRowCount(0); // Limpa linhas antigas
+        try {
+            String id = txtIdAluno.getText();           
+            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(id));
+            
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nenhum ID digitado. ");
+            }           
+
+            modelo.addRow(new Object[] {
+                aluno.getId(),
+                aluno.getNome(),
+                aluno.getCpf(),
+                aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                aluno.getIdade(),
+                aluno.getTelefone(),
+                aluno.getEmail()
+            });
+            
+            
+                     
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "ID não encontrado no banco de dados.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar aluno: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,25 +72,28 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        txtIdAluno = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        btnBuscarAluno = new javax.swing.JButton();
         txtNome = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         txtCPF = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         txtDataNascimento = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         txtTelefone = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        cadastrarAluno = new javax.swing.JButton();
+        excluirAluno = new javax.swing.JButton();
         btnVoltarInicial = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaAlunos = new javax.swing.JTable();
-        btnInicio = new javax.swing.JButton();
+        btnVoltarInicial1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        menuCadastrarAluno = new javax.swing.JMenuItem();
         menuEditarAluno = new javax.swing.JMenuItem();
-        menuDeletarAluno = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuCadastrarTreino = new javax.swing.JMenuItem();
         menuEditarTreino = new javax.swing.JMenuItem();
@@ -69,41 +106,65 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("WORKOUT ALUNOS");
-        setPreferredSize(new java.awt.Dimension(940, 630));
+        setPreferredSize(new java.awt.Dimension(1000, 630));
+        setSize(new java.awt.Dimension(0, 0));
 
         jLabel1.setFont(new java.awt.Font("SimSun", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("==== REGISTRAR ALUNO NA ACADEMIA ====");
+        jLabel1.setText("EXCLUIR ALUNO");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastrar Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 15))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 15))); // NOI18N
         jPanel2.setPreferredSize(new java.awt.Dimension(315, 411));
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel2.setText("Nome Completo");
+        txtIdAluno.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        txtNome.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel7.setText("ID aluno");
+
+        btnBuscarAluno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/lupa.png"))); // NOI18N
+        btnBuscarAluno.setText("Buscar");
+        btnBuscarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarAlunoActionPerformed(evt);
+            }
+        });
+
+        txtNome.setEditable(false);
+        txtNome.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtNome.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentRemoved(java.awt.event.ContainerEvent evt) {
+                txtNomeComponentRemoved(evt);
+            }
+        });
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomeActionPerformed(evt);
             }
         });
 
-        txtCPF.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel2.setText("Nome Completo");
+
+        txtCPF.setEditable(false);
+        txtCPF.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("CPF ");
 
+        txtDataNascimento.setEditable(false);
+        txtDataNascimento.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel6.setText("Data nascimento (DD/MM/YYYY)");
 
-        txtDataNascimento.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        txtTelefone.setEditable(false);
+        txtTelefone.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Telefone");
 
-        txtTelefone.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-
-        txtEmail.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        txtEmail.setEditable(false);
+        txtEmail.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("E-mail");
@@ -115,12 +176,18 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtIdAluno, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBuscarAluno))
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtDataNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel6)
+                        .addComponent(txtDataNascimento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel4)
                     .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
@@ -131,9 +198,15 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtIdAluno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarAluno))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNome)
+                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -150,15 +223,15 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
-        cadastrarAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        cadastrarAluno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/salve-.png"))); // NOI18N
-        cadastrarAluno.setText("SALVAR");
-        cadastrarAluno.addActionListener(new java.awt.event.ActionListener() {
+        excluirAluno.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        excluirAluno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/bin.png"))); // NOI18N
+        excluirAluno.setText("EXCLUIR");
+        excluirAluno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastrarAlunoActionPerformed(evt);
+                excluirAlunoActionPerformed(evt);
             }
         });
 
@@ -195,17 +268,17 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
         if (tabelaAlunos.getColumnModel().getColumnCount() > 0) {
             tabelaAlunos.getColumnModel().getColumn(0).setPreferredWidth(60);
             tabelaAlunos.getColumnModel().getColumn(0).setMaxWidth(80);
-            tabelaAlunos.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tabelaAlunos.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tabelaAlunos.getColumnModel().getColumn(1).setPreferredWidth(150);
             tabelaAlunos.getColumnModel().getColumn(4).setPreferredWidth(60);
             tabelaAlunos.getColumnModel().getColumn(4).setMaxWidth(80);
+            tabelaAlunos.getColumnModel().getColumn(6).setPreferredWidth(150);
         }
 
-        btnInicio.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        btnInicio.setText("INICIO");
-        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+        btnVoltarInicial1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnVoltarInicial1.setText("INICIO");
+        btnVoltarInicial1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInicioActionPerformed(evt);
+                btnVoltarInicial1ActionPerformed(evt);
             }
         });
 
@@ -213,44 +286,42 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 797, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                        .addGap(25, 25, 25)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
+                        .addGap(45, 45, 45)
                         .addComponent(btnVoltarInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(cadastrarAluno, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)
+                        .addComponent(excluirAluno, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))))
+                        .addComponent(btnVoltarInicial1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnVoltarInicial)
-                            .addComponent(cadastrarAluno)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnInicio)))
-                .addGap(0, 8, Short.MAX_VALUE))
+                    .addComponent(btnVoltarInicial)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(excluirAluno)
+                        .addComponent(btnVoltarInicial1)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Aluno");
@@ -259,6 +330,16 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
                 jMenu1ActionPerformed(evt);
             }
         });
+
+        menuCadastrarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        menuCadastrarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        menuCadastrarAluno.setText("Cadastrar Aluno");
+        menuCadastrarAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadastrarAlunoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuCadastrarAluno);
 
         menuEditarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         menuEditarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -269,16 +350,6 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
             }
         });
         jMenu1.add(menuEditarAluno);
-
-        menuDeletarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
-        menuDeletarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        menuDeletarAluno.setText("Deletar Aluno");
-        menuDeletarAluno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuDeletarAlunoActionPerformed(evt);
-            }
-        });
-        jMenu1.add(menuDeletarAluno);
 
         jMenuBar1.add(jMenu1);
 
@@ -365,50 +436,98 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBuscarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarAlunoActionPerformed
+        try {
+            String idStr = txtIdAluno.getText();
+            if (idStr.isEmpty()){
+                JOptionPane.showMessageDialog(this, "ID do aluno é obrigatório!");
+                return;
+            }
+
+            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
+
+            if (aluno == null){
+                throw new Exception("ID Aluno não encontrado.");
+            }
+
+            txtNome.setText(aluno.getNome());
+            txtNome.setEnabled(false);
+
+            txtCPF.setText(aluno.getCpf());
+            txtCPF.setEnabled(false);
+
+            txtTelefone.setText(aluno.getTelefone());
+            txtTelefone.setEnabled(false);
+
+            txtEmail.setText(aluno.getEmail());
+            txtEmail.setEnabled(false);
+
+            LocalDate dataNasc = aluno.getDataNascimento();
+            String dataStr= dataNasc.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            txtDataNascimento.setText(dataStr);
+            txtDataNascimento.setEnabled(false);
+            
+            DefaultTableModel modelo = new TelaVisualizarAlunos().TelaV(tabelaAlunos);
+            buscarAlunoId(modelo);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnBuscarAlunoActionPerformed
+
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeActionPerformed
 
-    private void cadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarAlunoActionPerformed
-        String nome = txtNome.getText();
-        String cpf = txtCPF.getText();
-        String dataNascimento = txtDataNascimento.getText();
-        String telefone = txtTelefone.getText();
-        String email = txtEmail.getText();
-
-        if (nome.isEmpty() || cpf.isEmpty() || dataNascimento.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nome, CPF e data de nascimento são obrigatórios!");
-            return;
-        }
+    private void excluirAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirAlunoActionPerformed
         try {
-            CadastrarAluno.cadastrarAluno(nome, cpf, dataNascimento, telefone, email);
-            JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!");
-            
-            TelaVisualizarAlunos carregar = new TelaVisualizarAlunos();
-            DefaultTableModel modelo = carregar.TelaV(tabelaAlunos);
-            carregar.carregarAlunos(modelo);
-            
+            String idStr = txtIdAluno.getText();
+            if (idStr.isEmpty()){
+                JOptionPane.showMessageDialog(this, "ID do aluno é obrigatório!");
+                return;
+            }
+
+            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
+
+            if (aluno == null){
+                throw new Exception("ID Aluno não encontrado.");
+            } else {
+                int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir " + aluno + " do ID: " + aluno.getId(), "Confirmação", JOptionPane.YES_NO_OPTION);
+                
+                if (opcao == JOptionPane.YES_OPTION) {
+                    AlunoRepositorio alunoEx = new AlunoRepositorio();
+                    alunoEx.deletarAluno(aluno.getId());
+                    JOptionPane.showMessageDialog(null, "Aluno excluido com sucesso!");
+                }
+            }
+
+            TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
+            DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
+            telaVisualizarAlunos.carregarAlunos(modelo);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-        catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao cadastrar aluno: " + e.getMessage());
-        }
-    }//GEN-LAST:event_cadastrarAlunoActionPerformed
+        
+    }//GEN-LAST:event_excluirAlunoActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        new TelaInicial().setVisible(true);
-        this.dispose();
+        TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
+        DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
+        telaVisualizarAlunos.carregarAlunos(modelo);
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
+    private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed
+        new TelaCadastrarAluno().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_menuCadastrarAlunoActionPerformed
+
     private void menuEditarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarAlunoActionPerformed
-        new TelaEditarAluno().setVisible(true);
+        new TelaExcluirAluno().setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_menuEditarAlunoActionPerformed
-
-    private void menuDeletarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarAlunoActionPerformed
-        new TelaExcluirAluno().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_menuDeletarAlunoActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
         // TODO add your handling code here:
@@ -441,16 +560,19 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void txtNomeComponentRemoved(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_txtNomeComponentRemoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomeComponentRemoved
+
     private void menuDeletarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarTreinoActionPerformed
         new TelaExcluirTreino().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_menuDeletarTreinoActionPerformed
 
-    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+    private void btnVoltarInicial1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicial1ActionPerformed
         new TelaInicial().setVisible(true);
         this.dispose();
-        
-    }//GEN-LAST:event_btnInicioActionPerformed
+    }//GEN-LAST:event_btnVoltarInicial1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -469,34 +591,39 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrarAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaExcluirAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrarAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaExcluirAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrarAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaExcluirAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrarAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaExcluirAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaCadastrarAluno().setVisible(true);
+                new TelaExcluirAluno().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnBuscarAluno;
     private javax.swing.JButton btnVoltarInicial;
-    private javax.swing.JButton cadastrarAluno;
+    private javax.swing.JButton btnVoltarInicial1;
+    private javax.swing.JButton excluirAluno;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -506,8 +633,8 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem menuCadastrarAluno;
     private javax.swing.JMenuItem menuCadastrarTreino;
-    private javax.swing.JMenuItem menuDeletarAluno;
     private javax.swing.JMenuItem menuDeletarTreino;
     private javax.swing.JMenuItem menuEditarAluno;
     private javax.swing.JMenuItem menuEditarTreino;
@@ -517,6 +644,7 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
     private javax.swing.JTextField txtCPF;
     private javax.swing.JTextField txtDataNascimento;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtIdAluno;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
