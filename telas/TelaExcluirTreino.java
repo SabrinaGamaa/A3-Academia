@@ -508,7 +508,7 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
                 }
             }
             
-            if (linhaSelecionada > 0) {
+            if (linhaSelecionada >= 0) {
                 String idTreinoLinha = tabelaTreinos.getValueAt(linhaSelecionada, 0).toString();
                 Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreinoLinha));
                 if (treino == null){

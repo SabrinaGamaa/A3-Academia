@@ -506,7 +506,7 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
                 }
             }
             
-            if (linhaSelecionada > 0) {
+            if (linhaSelecionada >= 0) {
                 String idStrLinha = tabelaAlunos.getValueAt(linhaSelecionada, 0).toString();
                 Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStrLinha));
                 
