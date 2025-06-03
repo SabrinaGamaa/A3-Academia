@@ -95,8 +95,7 @@ public class Treino {
 
     @Override
     public String toString() {
-        return " ===== LISTA DE TREINOS =====" +
-                "\nAluno ID: " + alunoId +
+        return  "\nAluno ID: " + alunoId +
                 "\nTreino ID: " + id +
                 "\nTipo: " + tipoTreino +
                 "\nDescrição: " + descricao +

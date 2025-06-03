@@ -481,23 +481,46 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
 
     private void excluirAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirAlunoActionPerformed
         try {
+                       
+            int linhaSelecionada = tabelaAlunos.getSelectedRow();
             String idStr = txtIdAluno.getText();
-            if (idStr.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do aluno é obrigatório!");
+            if (idStr.isEmpty() && linhaSelecionada == -1){
+                JOptionPane.showMessageDialog(this, "Digite o ID do aluno ou selecione a linha para excluir o aluno.");
                 return;
             }
+            
+            if (!idStr.isEmpty()) {
+                Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
 
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
+                if (aluno == null){
+                    throw new Exception("ID Aluno não encontrado.");
 
-            if (aluno == null){
-                throw new Exception("ID Aluno não encontrado.");
-            } else {
-                int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir " + aluno + " do ID: " + aluno.getId(), "Confirmação", JOptionPane.YES_NO_OPTION);
+                } else {
+                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir " + aluno.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
+
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        AlunoRepositorio alunoEx = new AlunoRepositorio();
+                        alunoEx.deletarAluno(aluno.getId());
+                        JOptionPane.showMessageDialog(null, "Aluno excluido com sucesso!");
+                    }
+                }
+            }
+            
+            if (linhaSelecionada > 0) {
+                String idStrLinha = tabelaAlunos.getValueAt(linhaSelecionada, 0).toString();
+                Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStrLinha));
                 
-                if (opcao == JOptionPane.YES_OPTION) {
-                    AlunoRepositorio alunoEx = new AlunoRepositorio();
-                    alunoEx.deletarAluno(aluno.getId());
-                    JOptionPane.showMessageDialog(null, "Aluno excluido com sucesso!");
+                if (aluno == null){
+                    throw new Exception("ID Aluno não encontrado.");
+
+                } else {
+                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir " + aluno.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
+
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        AlunoRepositorio alunoEx = new AlunoRepositorio();
+                        alunoEx.deletarAluno(aluno.getId());
+                        JOptionPane.showMessageDialog(null, "Aluno excluido com sucesso!");
+                    }
                 }
             }
 

@@ -95,8 +95,7 @@ public class Aluno {
 
     @Override
     public String toString() {
-        return " === Aluno === " +
-                "\nID: " + id +
+        return  "\nID: " + id +
                 "\nNome: " + nome +
                 "\nCPF: " + cpf +
                 "\nData Nascimento: " + dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+
