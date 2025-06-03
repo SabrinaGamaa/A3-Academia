@@ -23,6 +23,36 @@ public class TelaEditarAluno extends javax.swing.JFrame {
      */
     public TelaEditarAluno() {
         initComponents();
+
+        tabelaAlunos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int linhaSelecionada = tabelaAlunos.getSelectedRow();
+                if (linhaSelecionada >= 0) {
+                    int colunas = tabelaAlunos.getColumnCount();
+
+                    String[] dadosLinha = new String[colunas];
+
+                    for (int i = 0; i < colunas; i ++){
+                        String dados = tabelaAlunos.getValueAt(linhaSelecionada, i).toString();
+                        dadosLinha[i] = (dados != null) ? dados : "";
+                    }
+
+                    txtIdAluno.setText(dadosLinha[0]);
+
+                    txtNome.setText(dadosLinha[1]);
+
+                    txtCPF.setText(dadosLinha[2]);
+
+                    txtDataNascimento.setText(dadosLinha[3]);
+
+                    txtTelefone.setText(dadosLinha[5]);
+
+                    txtEmail.setText(dadosLinha[6]);
+                }
+            }
+        });
+
         TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
         DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
         telaVisualizarAlunos.carregarAlunos(modelo);
