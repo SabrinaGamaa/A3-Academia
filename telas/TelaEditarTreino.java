@@ -6,6 +6,7 @@ package telas;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
@@ -25,9 +26,45 @@ public class TelaEditarTreino extends javax.swing.JFrame {
      */
     public TelaEditarTreino() {
         initComponents();
+        
+        tabelaTreinos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int linhaSelecionada = tabelaTreinos.getSelectedRow();
+                if (linhaSelecionada >= 0) {
+                    int colunas = tabelaTreinos.getColumnCount();
+                    
+                    String[] dadosLinha = new String[colunas];
+                    
+                    for (int i = 0; i < colunas; i ++){
+                        String dados = tabelaTreinos.getValueAt(linhaSelecionada, i).toString();
+                        dadosLinha[i] = (dados != null) ? dados : "";
+                    }
+                    
+                    txtIdTreino.setText(dadosLinha[0]);
+                    
+                    txtIdAluno.setText(dadosLinha[1]);
+
+                    txtTipoTreino.setText(dadosLinha[3]);
+
+                    txtDataInicio.setText(dadosLinha[4]);
+
+                    String[] duracaoStr = dadosLinha[5].split(" ");
+                    String duracao = duracaoStr[0];
+                    txtDuracao.setText(duracao);
+ 
+                    txtDescricao.setText(dadosLinha[6]);
+                }
+            }
+        });    
+        
+        
         TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
         DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
         telaCadastrarTreino.listarTreinos(modelo);
+        
+        
+        
     }
     
     
