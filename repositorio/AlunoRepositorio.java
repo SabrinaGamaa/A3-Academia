@@ -74,7 +74,7 @@ public class AlunoRepositorio {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar os alunos: " + e);
+            throw new RuntimeException("Erro ao listar alunos " + e);
         }
         return lista;
     }
