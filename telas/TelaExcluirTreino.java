@@ -485,23 +485,43 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
     private void excluirTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirTreinoActionPerformed
         try {
             String idTreino = txtIdTreino.getText();
-            if (idTreino.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
+            int linhaSelecionada = tabelaTreinos.getSelectedRow();
+            
+            if (idTreino.isEmpty() && linhaSelecionada == -1){
+                JOptionPane.showMessageDialog(this, "Digite o ID do Treino ou selecione a linha para excluir o treino.");
                 return;
             }
+            
+            if (!idTreino.isEmpty()) {
+                Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
+                if (treino == null){
+                    throw new Exception("ID Treino não encontrado.");
+                } else {
+                    Aluno alunoNome = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
+                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir treino de " + alunoNome.getNome() + treino.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
 
-            Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        TreinoRepositorio treinoEx = new TreinoRepositorio();
+                        treinoEx.deletarTreino(treino.getId());
+                        JOptionPane.showMessageDialog(null, "Treino excluido com sucesso!");
+                    }
+                }
+            }
+            
+            if (linhaSelecionada > 0) {
+                String idTreinoLinha = tabelaTreinos.getValueAt(linhaSelecionada, 0).toString();
+                Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreinoLinha));
+                if (treino == null){
+                    throw new Exception("ID Treino não encontrado.");
+                } else {
+                    Aluno alunoNome = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
+                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir treino de " + alunoNome.getNome() + treino.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
 
-            if (treino == null){
-                throw new Exception("ID Treino não encontrado.");
-            } else {
-                Aluno alunoNome = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir treino de " + alunoNome.getNome() + " do ID treino: " + treino.getId(), "Confirmação", JOptionPane.YES_NO_OPTION);
-                
-                if (opcao == JOptionPane.YES_OPTION) {
-                    TreinoRepositorio treinoEx = new TreinoRepositorio();
-                    treinoEx.deletarTreino(treino.getId());
-                    JOptionPane.showMessageDialog(null, "Treino excluido com sucesso!");
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        TreinoRepositorio treinoEx = new TreinoRepositorio();
+                        treinoEx.deletarTreino(treino.getId());
+                        JOptionPane.showMessageDialog(null, "Treino excluido com sucesso!");
+                    }
                 }
             }
             
