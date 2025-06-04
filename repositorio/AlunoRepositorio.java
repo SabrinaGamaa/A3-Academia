@@ -74,7 +74,7 @@ public class AlunoRepositorio {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar alunos " + e);
+            throw new RuntimeException("Erro ao buscar alunos: " + e);
         }
         return lista;
     }
@@ -111,7 +111,6 @@ public class AlunoRepositorio {
     public Aluno listarAlunoPorId(long id) {
         String sql = "SELECT * FROM Aluno WHERE id = ?";
 
-
         try (Connection con = Conexao.conectar()) {
             PreparedStatement stmt = con.prepareStatement(sql); { stmt.setLong(1, id);}
             ResultSet rs = stmt.executeQuery();
@@ -128,10 +127,7 @@ public class AlunoRepositorio {
 
             }
 
-        } catch (NullPointerException e){
-            throw new NullPointerException("ALGUM OUTRO ERRO: " + e.getMessage());
-            
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar Aluno: " + e);
         }
 

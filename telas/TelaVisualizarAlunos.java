@@ -26,9 +26,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         modelo.setRowCount(0); // Limpa linhas antigas
         try {
             AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
-            List<Aluno> alunos = alunoRepositorio.listarAluno();
-
-            
+            List<Aluno> alunos = alunoRepositorio.listarAluno();            
 
             for (Aluno aluno : alunos) {
                 modelo.addRow(new Object[]{
@@ -51,28 +49,30 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     
     public void ListarAlunosPorNome(DefaultTableModel modelo) {
         modelo.setRowCount(0); // Limpa linhas antigas
+        
+        String nome = txtListarAlunoNome.getText();           
+        if (nome.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nenhum nome digitado. ");
+            return;
+        }
+        
         try {
-            String nome = txtListarAlunoNome.getText();           
-            List<Aluno> alunos = new AlunoRepositorio().listarAlunoPorNome(nome.toLowerCase());
-            
-            if (nome.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum nome digitado. ");
-            }
+            List<Aluno> alunos = new AlunoRepositorio().listarAlunoPorNome(nome.toLowerCase().trim());
             
             if (alunos.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nome não encontrado no banco de dados.");
-            }
-            
-            for (Aluno aluno : alunos) {
-                modelo.addRow(new Object[] {
-                    aluno.getId(),
-                    aluno.getNome(),
-                    aluno.getCpf(),
-                    aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    aluno.getIdade(),
-                    aluno.getTelefone(),
-                    aluno.getEmail()
-                });
+                JOptionPane.showMessageDialog(this, "Nome " + nome + " não encontrado no banco de dados.");
+            } else {
+                for (Aluno aluno : alunos) {
+                    modelo.addRow(new Object[] {
+                        aluno.getId(),
+                        aluno.getNome(),
+                        aluno.getCpf(),
+                        aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        aluno.getIdade(),
+                        aluno.getTelefone(),
+                        aluno.getEmail()
+                    });
+                }
             }
             
                      
@@ -85,31 +85,39 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     
     public void buscarAlunoId(DefaultTableModel modelo){
         modelo.setRowCount(0); // Limpa linhas antigas
+        
+        String idStr = txtBuscarAlunoId.getText();           
+        
+        if (idStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nenhum ID digitado. ");
+            return;
+        } 
+        
         try {
-            String id = txtBuscarAlunoId.getText();           
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(id));
+            Long id = Long.parseLong(idStr.trim());
+            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(id);
             
-            if (id.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum ID digitado. ");
-            }           
-
-            modelo.addRow(new Object[] {
-                aluno.getId(),
-                aluno.getNome(),
-                aluno.getCpf(),
-                aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                aluno.getIdade(),
-                aluno.getTelefone(),
-                aluno.getEmail()
-            });
-            
+            if (aluno == null) {
+                JOptionPane.showMessageDialog(this, "Nenhum aluno com ID " + id + " encontrado.");
+            } else {
+                modelo.addRow(new Object[] {
+                    aluno.getId(),
+                    aluno.getNome(),
+                    aluno.getCpf(),
+                    aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    aluno.getIdade(),
+                    aluno.getTelefone(),
+                    aluno.getEmail()
+                });
+            }
             
                      
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "ID não encontrado no banco de dados.");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, digite apenas números.");
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar aluno: " + e.getMessage());
-            e.printStackTrace();
+            
         }
         
     }
