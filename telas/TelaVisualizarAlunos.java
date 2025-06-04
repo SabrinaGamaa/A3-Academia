@@ -4,152 +4,27 @@
  */
 package telas;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import modelos.Aluno;
-import repositorio.AlunoRepositorio;
+import servicos.ListarAlunoPorNome;
+import servicos.ListarAlunos;
+import servicos.BuscarAlunoPorId;
+import servicos.ModeloTabela;
 
 /**
  *
  * @author Sabrina Gama
  */
-public class TelaVisualizarAlunos extends javax.swing.JFrame {
-    
-    public void carregarAlunos (DefaultTableModel modelo) {
-        modelo.setRowCount(0); // Limpa linhas antigas
-        try {
-            AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
-            List<Aluno> alunos = alunoRepositorio.listarAluno();            
-
-            for (Aluno aluno : alunos) {
-                modelo.addRow(new Object[]{
-                    aluno.getId(),
-                    aluno.getNome(),
-                    aluno.getCpf(),
-                    aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    aluno.getIdade(),
-                    aluno.getTelefone(),
-                    aluno.getEmail()
-                });
-        }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar alunos: " + e.getMessage());
-            }
-        
-    }
-    
-    
-    public void ListarAlunosPorNome(DefaultTableModel modelo) {
-        modelo.setRowCount(0); // Limpa linhas antigas
-        
-        String nome = txtListarAlunoNome.getText();           
-        if (nome.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nenhum nome digitado. ");
-            return;
-        }
-        
-        try {
-            List<Aluno> alunos = new AlunoRepositorio().listarAlunoPorNome(nome.toLowerCase().trim());
-            
-            if (alunos.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nome " + nome + " não encontrado no banco de dados.");
-            } else {
-                for (Aluno aluno : alunos) {
-                    modelo.addRow(new Object[] {
-                        aluno.getId(),
-                        aluno.getNome(),
-                        aluno.getCpf(),
-                        aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                        aluno.getIdade(),
-                        aluno.getTelefone(),
-                        aluno.getEmail()
-                    });
-                }
-            }
-            
-                     
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar aluno: " + e.getMessage());
-        }
-        
-    }
-    
-    
-    public void buscarAlunoId(DefaultTableModel modelo){
-        modelo.setRowCount(0); // Limpa linhas antigas
-        
-        String idStr = txtBuscarAlunoId.getText();           
-        
-        if (idStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nenhum ID digitado. ");
-            return;
-        } 
-        
-        try {
-            Long id = Long.parseLong(idStr.trim());
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(id);
-            
-            if (aluno == null) {
-                JOptionPane.showMessageDialog(this, "Nenhum aluno com ID " + id + " encontrado.");
-            } else {
-                modelo.addRow(new Object[] {
-                    aluno.getId(),
-                    aluno.getNome(),
-                    aluno.getCpf(),
-                    aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    aluno.getIdade(),
-                    aluno.getTelefone(),
-                    aluno.getEmail()
-                });
-            }
-            
-                     
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, digite apenas números.");
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar aluno: " + e.getMessage());
-            
-        }
-        
-    }
-    
-    
-    public final DefaultTableModel TelaV(JTable tabelaAlunos) {
-        DefaultTableModel modelo = (DefaultTableModel) tabelaAlunos.getModel();
-        tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-
-        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
-        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
-
-        tabelaAlunos.setBackground(new Color(245, 245, 245));
-        tabelaAlunos.setForeground(Color.DARK_GRAY);
-        tabelaAlunos.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        tabelaAlunos.setRowHeight(28);
-        tabelaAlunos.setGridColor(Color.LIGHT_GRAY);
-        tabelaAlunos.setSelectionBackground(new Color(200, 230, 255));
-        
-        return modelo;
-    }
-    
+public class TelaVisualizarAlunos extends javax.swing.JFrame {     
+    ModeloTabela modeloTabela = new ModeloTabela();
     
     /**
      * Creates new form TelaVisualizarAlunos
      */
     public TelaVisualizarAlunos() {      
         initComponents();
-        DefaultTableModel modelo = TelaV(tabelaAlunos);
-        
-        carregarAlunos(modelo);
+        ListarAlunos listarAlunos = new ListarAlunos();
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+        listarAlunos.carregarAlunos(this, modelo);
         
     }
 
@@ -173,7 +48,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         txtBuscarAlunoId = new javax.swing.JTextField();
         btnBurcarAlunoId = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaAlunos = new JTable();
+        tabelaAlunos = new javax.swing.JTable();
         btnVoltarInicial = new javax.swing.JButton();
         btnVoltarInicial1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -193,24 +68,24 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("WORKOUT");
         setAlwaysOnTop(true);
-        setBackground(new Color(255, 255, 255));
+        setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(940, 630));
         setSize(new java.awt.Dimension(0, 0));
 
-        jLabel2.setFont(new Font("SimSun", 1, 36)); // NOI18N
-        jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel2.setFont(new java.awt.Font("SimSun", 1, 36)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("ACADEMIA WORKOUT");
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Aluno Por Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 0, 15))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Aluno Por Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 15))); // NOI18N
         jPanel3.setToolTipText("");
 
-        jLabel5.setFont(new Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("Nome:");
 
-        txtListarAlunoNome.setFont(new Font("Tahoma", 0, 14)); // NOI18N
+        txtListarAlunoNome.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        btnListarAlunoNome.setBackground(new Color(238, 238, 238));
-        btnListarAlunoNome.setFont(new Font("Arial", 0, 14)); // NOI18N
+        btnListarAlunoNome.setBackground(new java.awt.Color(238, 238, 238));
+        btnListarAlunoNome.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnListarAlunoNome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/visualizar.png"))); // NOI18N
         btnListarAlunoNome.setText("PESQUISAR");
         btnListarAlunoNome.addActionListener(new java.awt.event.ActionListener() {
@@ -247,16 +122,16 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                 .addGap(12, 12, 12))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Aluno Por ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 0, 15))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Aluno Por ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 15))); // NOI18N
         jPanel6.setToolTipText("");
 
-        jLabel7.setFont(new Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("ID Aluno");
 
-        txtBuscarAlunoId.setFont(new Font("Tahoma", 0, 14)); // NOI18N
+        txtBuscarAlunoId.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        btnBurcarAlunoId.setBackground(new Color(238, 238, 238));
-        btnBurcarAlunoId.setFont(new Font("Arial", 0, 14)); // NOI18N
+        btnBurcarAlunoId.setBackground(new java.awt.Color(238, 238, 238));
+        btnBurcarAlunoId.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnBurcarAlunoId.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/visualizar.png"))); // NOI18N
         btnBurcarAlunoId.setText("PESQUISAR");
         btnBurcarAlunoId.addActionListener(new java.awt.event.ActionListener() {
@@ -293,7 +168,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
-        tabelaAlunos.setFont(new Font("Segoe UI Semibold", 1, 14)); // NOI18N
+        tabelaAlunos.setFont(new java.awt.Font("Segoe UI Semibold", 1, 14)); // NOI18N
         tabelaAlunos.setModel(new DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -313,7 +188,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        tabelaAlunos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tabelaAlunos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tabelaAlunos.setMinimumSize(new java.awt.Dimension(0, 0));
         tabelaAlunos.setShowGrid(false);
         tabelaAlunos.setShowHorizontalLines(true);
@@ -328,7 +203,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
             tabelaAlunos.getColumnModel().getColumn(6).setMinWidth(100);
         }
 
-        btnVoltarInicial.setFont(new Font("Arial", 1, 14)); // NOI18N
+        btnVoltarInicial.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnVoltarInicial.setText("VOLTAR");
         btnVoltarInicial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -336,7 +211,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
             }
         });
 
-        btnVoltarInicial1.setFont(new Font("Arial", 1, 14)); // NOI18N
+        btnVoltarInicial1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnVoltarInicial1.setText("INICIO");
         btnVoltarInicial1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -392,7 +267,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         });
 
         menuCadastrarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        menuCadastrarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuCadastrarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuCadastrarAluno.setText("Cadastrar Aluno");
         menuCadastrarAluno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -402,7 +277,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         jMenu1.add(menuCadastrarAluno);
 
         menuEditarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        menuEditarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuEditarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuEditarAluno.setText("Editar Aluno");
         menuEditarAluno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -412,7 +287,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         jMenu1.add(menuEditarAluno);
 
         menuDeletarAluno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
-        menuDeletarAluno.setFont(new Font("Arial", 0, 12)); // NOI18N
+        menuDeletarAluno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         menuDeletarAluno.setText("Deletar Aluno");
         menuDeletarAluno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -500,19 +375,23 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnListarAlunoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarAlunoNomeActionPerformed
-        DefaultTableModel modelo = TelaV(tabelaAlunos);   
-        ListarAlunosPorNome(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos); 
+        ListarAlunoPorNome listarAlunoPorNome = new ListarAlunoPorNome();
+        listarAlunoPorNome.listarAlunosPorNome(this, modelo, txtListarAlunoNome);
         
     }//GEN-LAST:event_btnListarAlunoNomeActionPerformed
 
     private void btnBurcarAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarAlunoIdActionPerformed
-        DefaultTableModel modelo = TelaV(tabelaAlunos);   
-        buscarAlunoId(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos); 
+        BuscarAlunoPorId busAlunoPorId = new BuscarAlunoPorId();
+        busAlunoPorId.buscarAlunoId(this, modelo, txtBuscarAlunoId);
+                
     }//GEN-LAST:event_btnBurcarAlunoIdActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        DefaultTableModel modelo = TelaV(tabelaAlunos);      
-        carregarAlunos(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);   
+        ListarAlunos listarAlunos = new ListarAlunos();
+        listarAlunos.carregarAlunos(this, modelo);
 
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
@@ -629,7 +508,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuEditarAluno;
     private javax.swing.JMenuItem menuEditarTreino;
     private javax.swing.JMenuItem menuVisualizarTreinos;
-    private JTable tabelaAlunos;
+    private javax.swing.JTable tabelaAlunos;
     private javax.swing.JTextField txtBuscarAlunoId;
     private javax.swing.JTextField txtListarAlunoNome;
     // End of variables declaration//GEN-END:variables

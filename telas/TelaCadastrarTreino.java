@@ -8,98 +8,37 @@ import java.awt.Color;
 import java.awt.Font;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
-import modelos.Treino;
 import repositorio.AlunoRepositorio;
-import repositorio.TreinoRepositorio;
 import servicos.CadastrarTreino;
+import servicos.ListarTreinos;
+import servicos.ModeloTabela;
 
 /**
  *
  * @author Sabrina Gama
  */
 public class TelaCadastrarTreino extends javax.swing.JFrame {
-
+    ModeloTabela modeloTabela = new ModeloTabela();
+    ListarTreinos listarTreinos = new ListarTreinos();
+    
     public final void carregarData() {
         LocalDateTime data = LocalDateTime.now();
         String dataStr= data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
         txtDataInicio.setText(dataStr);
-    }
-    
-    public final DefaultTableModel TelaV(JTable tabelaTreinos) {
-        DefaultTableModel modelo = (DefaultTableModel) tabelaTreinos.getModel();
-        tabelaTreinos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-
-        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
-        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
-
-        tabelaTreinos.setBackground(new Color(245, 245, 245));
-        tabelaTreinos.setForeground(Color.DARK_GRAY);
-        tabelaTreinos.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        tabelaTreinos.setRowHeight(28);
-        tabelaTreinos.setGridColor(Color.LIGHT_GRAY);
-        tabelaTreinos.setSelectionBackground(new Color(200, 230, 255));
-        
-        return modelo;
-    }
-    
-    public final void listarTreinos(DefaultTableModel modelo){       
-        modelo.setRowCount(0); // Limpa linhas antigas
-        try {
-
-            List<Treino> treinos = new TreinoRepositorio().listarTreinoAlunos();            
-             
-            for (Treino treino : treinos) {
-                Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                if (alunos != null) {
-                    modelo.addRow(new Object[] {
-                        treino.getId(),
-                        treino.getAlunoId(),
-                        alunos.getNome(),
-                        treino.getTipoTreino(),
-                        treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                        String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                        treino.getDescricao()
-                    });
-                }
-                else {
-                    modelo.addRow(new Object[] {
-                        treino.getId(),
-                        treino.getAlunoId(),
-                        null,
-                        treino.getTipoTreino(),
-                        treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                        String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                        treino.getDescricao()
-                    });
-                }
-            }
-
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    
-    
-    
-    
+    }   
     
     /**
      * Creates new form TelaCadastrarAluno
      */
     public TelaCadastrarTreino() {
         initComponents();
-        DefaultTableModel modelo = TelaV(tabelaTreinos);
-        listarTreinos(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        listarTreinos.listar(this, modelo);
         carregarData();
     }
     
@@ -456,8 +395,8 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAlunoIdActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        DefaultTableModel modelo = TelaV(tabelaTreinos);
-        listarTreinos(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        listarTreinos.listar(this, modelo);
         carregarData();
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
@@ -482,8 +421,8 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
             CadastrarTreino.cadastrarTreino(alunoId, tipoTreino, descricao, duracao);
             JOptionPane.showMessageDialog(this, "Treino para o ID aluno " + alunoId + " cadastrado com sucesso!");
             
-            DefaultTableModel modelo = TelaV(tabelaTreinos);
-            listarTreinos(modelo);
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+            listarTreinos.listar(this, modelo);
             
         }
         catch (Exception e) {

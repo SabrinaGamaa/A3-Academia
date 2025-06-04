@@ -1,29 +1,50 @@
 package servicos;
 
+import java.awt.Component;
+import java.time.format.DateTimeFormatter;
 import modelos.Aluno;
 import repositorio.AlunoRepositorio;
 
 import java.util.List;
-import java.util.Scanner;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class ListarAlunoPorNome {
 
-    public static void listarAluno(Scanner sc) {
-        System.out.println(" ----- LISTAR ALUNO PELO NOME ---- ");
-        System.out.print("Nome do aluno: ");
-        String nome = sc.nextLine().toLowerCase();
-
-        AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
-        List<Aluno> alunos = alunoRepositorio.listarAlunoPorNome(nome);
-
-        if (nome.isEmpty()) {
-            System.out.println("Nenhum Aluno com esse nome encontrado.");
-        } else {
-            for (Aluno aluno : alunos) {
-                System.out.println(aluno.toString());
-            }
+    public void listarAlunosPorNome(Component Tela, DefaultTableModel modelo, JTextField txtListarAlunoNome) {
+        modelo.setRowCount(0); // Limpa linhas antigas
+        
+        String nome = txtListarAlunoNome.getText();           
+        if (nome.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(Tela, "Nenhum nome digitado. ");
+            return;
         }
-
+        
+        try {
+            List<Aluno> alunos = new AlunoRepositorio().listarAlunoPorNome(nome.toLowerCase().trim());
+            
+            if (alunos.isEmpty()) {
+                JOptionPane.showMessageDialog(Tela, "Nome " + nome + " não encontrado no banco de dados.");
+            } else {
+                for (Aluno aluno : alunos) {
+                    modelo.addRow(new Object[] {
+                        aluno.getId(),
+                        aluno.getNome(),
+                        aluno.getCpf(),
+                        aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        aluno.getIdade(),
+                        aluno.getTelefone(),
+                        aluno.getEmail()
+                    });
+                }
+            }
+            
+                     
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(Tela, "Erro ao carregar aluno: " + e.getMessage());
+        }
+        
     }
 
 }

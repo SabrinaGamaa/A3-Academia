@@ -4,171 +4,27 @@
  */
 package telas;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import modelos.Aluno;
-import modelos.Treino;
-import repositorio.AlunoRepositorio;
-import repositorio.TreinoRepositorio;
+import servicos.ListarTreinoPorAluno;
+import servicos.ListarTreinoPorId;
+import servicos.ListarTreinoPorNome;
+import servicos.ListarTreinos;
+import servicos.ModeloTabela;
 
 /**
  *
  * @author Sabrina Gama
  */
 public class TelaVisualizarTreinos extends javax.swing.JFrame {
-  
-    public void listarTreinoPorId(DefaultTableModel modelo){
-        modelo.setRowCount(0); // Limpa linhas antigas
-        
-        String idTreinoStr = txtIdTreino.getText();
-        if (idTreinoStr.isEmpty()){
-            JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
-            return;
-        }
-               
-        try {
-            
-            Long idTreino = Long.parseLong(idTreinoStr.trim());
-            Treino treino = new TreinoRepositorio().buscarTreinoPorId(idTreino);
-
-            if (treino == null){
-                JOptionPane.showMessageDialog(this, "ID Treino" + idTreino + " não encontrado.");
-                
-            } else {
-                Aluno aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                modelo.addRow(new Object[] {
-                    treino.getId(),
-                    treino.getAlunoId(),
-                    aluno.getNome(),
-                    treino.getTipoTreino(),
-                    treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                    String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                    treino.getDescricao()
-                });
-            }
-             
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID Treino inválido. Por favor, digite apenas números.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-        }
-    }
-    
-    public final void listarTreinosPorIdAluno(DefaultTableModel modelo){       
-        modelo.setRowCount(0); 
-        
-        String idTreinoStr = txtIdAluno.getText();
-        
-        if (idTreinoStr.isEmpty()){
-            JOptionPane.showMessageDialog(this, "ID do Aluno é obrigatório!");
-            return;
-        }
-        
-        try {
-            
-            Long idTreino = Long.parseLong(idTreinoStr.trim());
-            List<Treino> treinos = new TreinoRepositorio().listarTreinoAluno(idTreino);            
-
-            if (treinos.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Nenhum treino encontrado para o Aluno ID " + idTreino);
-            } else {   
-                for (Treino treino : treinos) {
-                    Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                    if (alunos != null) {
-                        modelo.addRow(new Object[] {
-                            treino.getId(),
-                            treino.getAlunoId(),
-                            alunos.getNome(),
-                            treino.getTipoTreino(),
-                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                            treino.getDescricao()
-                        });
-                    }
-                    else {
-                        modelo.addRow(new Object[] {
-                            treino.getId(),
-                            treino.getAlunoId(),
-                            "Aluno Desconhecido",
-                            treino.getTipoTreino(),
-                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                            treino.getDescricao()
-                        });
-                    }
-                }
-            }
-            
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, digite apenas números.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-        }
-    }
-    
-    public final void listarTreinosPorNome(DefaultTableModel modelo){       
-        modelo.setRowCount(0); // Limpa linhas antigas       
-        
-        String nomeAluno = txtNomeAluno.getText().trim();
-        if (nomeAluno.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Nome do Aluno é obrigatório!");
-            return;
-        }
-        
-        try {           
-            List<Treino> treinos = new TreinoRepositorio().listarTreinoAlunoPorNome(nomeAluno);            
-
-            if (treinos.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Sem treino para o nome: " + nomeAluno);
-            } else {    
-                for (Treino treino : treinos) {
-                    Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                    if (alunos != null) {
-                        modelo.addRow(new Object[] {
-                            treino.getId(),
-                            treino.getAlunoId(),
-                            alunos.getNome(),
-                            treino.getTipoTreino(),
-                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                            treino.getDescricao()
-                        });
-                    }
-                    else {
-                        modelo.addRow(new Object[] {
-                            treino.getId(),
-                            treino.getAlunoId(),
-                            "Aluno Desconhecido",
-                            treino.getTipoTreino(),
-                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                            treino.getDescricao()
-                        });
-                    }
-                }
-            }
-
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    
+    ModeloTabela modeloTabela = new ModeloTabela();
+    ListarTreinos listarTreinos = new ListarTreinos();
     /**
      * Creates new form TelaVisualizarAlunos
      */
     public TelaVisualizarTreinos() {      
         initComponents();       
-        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-        telaCadastrarTreino.listarTreinos(modelo);
-        
-        
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        listarTreinos.listar(this, modelo);              
     }
 
     /**
@@ -565,16 +421,18 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnListarTreinoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarTreinoNomeActionPerformed
-        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-        listarTreinosPorNome(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        
+        ListarTreinoPorNome listarTreinoPorNome = new ListarTreinoPorNome();
+        listarTreinoPorNome.listarTreinosPorNome(this, modelo, txtNomeAluno);
         
     }//GEN-LAST:event_btnListarTreinoNomeActionPerformed
 
     private void btnBurcarAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarAlunoIdActionPerformed
-        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-        listarTreinosPorIdAluno(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        
+        ListarTreinoPorAluno listarTreinoPorAluno = new ListarTreinoPorAluno();
+        listarTreinoPorAluno.listarTreinosPorIdAluno(this, modelo, txtIdAluno);
     }//GEN-LAST:event_btnBurcarAlunoIdActionPerformed
 
     private void btnInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicialActionPerformed
@@ -583,9 +441,9 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInicialActionPerformed
 
     private void btnBurcarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarTreinoActionPerformed
-        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-        listarTreinoPorId(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        ListarTreinoPorId listarTreinoPorId = new ListarTreinoPorId();
+        listarTreinoPorId.listarTreino(this, modelo, txtIdTreino);
         
     }//GEN-LAST:event_btnBurcarTreinoActionPerformed
 
@@ -638,9 +496,8 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
     }//GEN-LAST:event_menuDeletarTreinoActionPerformed
 
     private void btnVoltarInicial1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicial1ActionPerformed
-        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-        telaCadastrarTreino.listarTreinos(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        listarTreinos.listar(this, modelo);
     }//GEN-LAST:event_btnVoltarInicial1ActionPerformed
 
     /**

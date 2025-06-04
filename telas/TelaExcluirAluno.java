@@ -10,54 +10,24 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
 import repositorio.AlunoRepositorio;
-import servicos.EditarAluno;
+import servicos.BuscarAlunoPorId;
+import servicos.ListarAlunos;
+import servicos.ModeloTabela;
 
 /**
  *
  * @author Sabrina Gama
  */
 public class TelaExcluirAluno extends javax.swing.JFrame {
-
+    ListarAlunos listarAlunos = new ListarAlunos();
+    ModeloTabela modeloTabela = new ModeloTabela();
     /**
      * Creates new form TelaCadastrarAluno
      */
     public TelaExcluirAluno() {
         initComponents();
-        TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
-        DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
-        telaVisualizarAlunos.carregarAlunos(modelo);
-    }
-   
-    
-    public void buscarAlunoId(DefaultTableModel modelo){
-        modelo.setRowCount(0); // Limpa linhas antigas
-        try {
-            String id = txtIdAluno.getText();           
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(id));
-            
-            if (id.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum ID digitado. ");
-            }           
-
-            modelo.addRow(new Object[] {
-                aluno.getId(),
-                aluno.getNome(),
-                aluno.getCpf(),
-                aluno.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                aluno.getIdade(),
-                aluno.getTelefone(),
-                aluno.getEmail()
-            });
-            
-            
-                     
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "ID não encontrado no banco de dados.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar aluno: " + e.getMessage());
-            e.printStackTrace();
-        }
-        
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+        listarAlunos.carregarAlunos(this, modelo);
     }
 
     /**
@@ -467,8 +437,9 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
             txtDataNascimento.setText(dataStr);
             txtDataNascimento.setEnabled(false);
             
-            DefaultTableModel modelo = new TelaVisualizarAlunos().TelaV(tabelaAlunos);
-            buscarAlunoId(modelo);
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+            BuscarAlunoPorId buscarAluno = new BuscarAlunoPorId();
+            buscarAluno.buscarAlunoId(this, modelo, txtIdAluno);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -524,9 +495,9 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
                 }
             }
 
-            TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
-            DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
-            telaVisualizarAlunos.carregarAlunos(modelo);
+
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+            listarAlunos.carregarAlunos(this, modelo);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -535,9 +506,8 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
     }//GEN-LAST:event_excluirAlunoActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        TelaVisualizarAlunos telaVisualizarAlunos = new TelaVisualizarAlunos();
-        DefaultTableModel modelo = telaVisualizarAlunos.TelaV(tabelaAlunos);
-        telaVisualizarAlunos.carregarAlunos(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+        listarAlunos.carregarAlunos(this, modelo);
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed

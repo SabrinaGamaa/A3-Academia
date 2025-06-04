@@ -12,58 +12,24 @@ import modelos.Aluno;
 import modelos.Treino;
 import repositorio.AlunoRepositorio;
 import repositorio.TreinoRepositorio;
-import servicos.EditarTreino;
+import servicos.ListarTreinoPorId;
+import servicos.ListarTreinos;
+import servicos.ModeloTabela;
 
 /**
  *
  * @author Sabrina Gama
  */
 public class TelaExcluirTreino extends javax.swing.JFrame {
-    
+    ModeloTabela modeloTabela = new ModeloTabela();
+    ListarTreinos listarTreinos = new ListarTreinos();
     /**
      * Creates new form TelaCadastrarAluno
      */
     public TelaExcluirTreino() {
         initComponents();
-        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-        telaCadastrarTreino.listarTreinos(modelo);
-    }
-    
-    
-    public void listarTreinoPorId(DefaultTableModel modelo){
-        modelo.setRowCount(0); // Limpa linhas antigas
-        try {
-            String idTreino = txtIdTreino.getText();
-            if (idTreino.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
-                return;
-            }
-
-            Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
-
-            if (treino == null){
-                throw new Exception("ID Treino não encontrado.");
-            }
-            
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                    
-            modelo.addRow(new Object[] {
-                treino.getId(),
-                treino.getAlunoId(),
-                aluno.getNome(),
-                treino.getTipoTreino(),
-                treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                treino.getDescricao()
-            });
-             
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "ID treino não encontrado no banco de dados.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-            e.printStackTrace();
-        }
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        listarTreinos.listar(this, modelo);
     }
     
 
@@ -471,9 +437,11 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
             txtDataInicio.setText(dataStr);
             txtDataInicio.setEnabled(false);
             
-            TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-            DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-            listarTreinoPorId(modelo);
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+ 
+            ListarTreinoPorId listarTreinoPorId = new ListarTreinoPorId();
+            listarTreinoPorId.listarTreino(this, modelo, txtIdTreino);
+            
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -525,9 +493,8 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
                 }
             }
             
-            TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-            DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-            telaCadastrarTreino.listarTreinos(modelo);
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+            listarTreinos.listar(this, modelo);
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -536,9 +503,8 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
     }//GEN-LAST:event_excluirTreinoActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
-        TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
-        DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
-        telaCadastrarTreino.listarTreinos(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+        listarTreinos.listar(this, modelo);
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed

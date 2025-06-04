@@ -7,20 +7,23 @@ package telas;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import servicos.CadastrarAluno;
+import servicos.ListarAlunos;
+import servicos.ModeloTabela;
 
 /**
  *
  * @author Sabrina Gama
  */
 public class TelaCadastrarAluno extends javax.swing.JFrame {
+    ListarAlunos listarAlunos = new ListarAlunos();
+    ModeloTabela modeloTabela = new ModeloTabela();
     /**
      * Creates new form TelaCadastrarAluno
      */
     public TelaCadastrarAluno() {
         initComponents();
-        TelaVisualizarAlunos carregar = new TelaVisualizarAlunos();
-        DefaultTableModel modelo = carregar.TelaV(tabelaAlunos);
-        carregar.carregarAlunos(modelo);
+        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+        listarAlunos.carregarAlunos(this, modelo);
     }
     
     
@@ -384,9 +387,8 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
             CadastrarAluno.cadastrarAluno(nome, cpf, dataNascimento, telefone, email);
             JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!");
             
-            TelaVisualizarAlunos carregar = new TelaVisualizarAlunos();
-            DefaultTableModel modelo = carregar.TelaV(tabelaAlunos);
-            carregar.carregarAlunos(modelo);
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+            listarAlunos.carregarAlunos(this, modelo);
             
         }
         catch (Exception e) {

@@ -1,37 +1,40 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package servicos;
 
 import java.awt.Component;
 import java.time.format.DateTimeFormatter;
-import modelos.Treino;
-import repositorio.TreinoRepositorio;
-
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
+import modelos.Treino;
 import repositorio.AlunoRepositorio;
+import repositorio.TreinoRepositorio;
 
-public class ListarTreinoPorAluno {
-
-    public final void listarTreinosPorIdAluno(Component Tela, DefaultTableModel modelo, JTextField txtIdAluno){       
-        modelo.setRowCount(0); 
+/**
+ *
+ * @author Sabrina Gama
+ */
+public class ListarTreinoPorNome {
+    public final void listarTreinosPorNome(Component Tela, DefaultTableModel modelo, JTextField txtNomeAluno){       
+        modelo.setRowCount(0); // Limpa linhas antigas       
         
-        String idTreinoStr = txtIdAluno.getText();
-        
-        if (idTreinoStr.isEmpty()){
-            JOptionPane.showMessageDialog(Tela, "ID do Aluno é obrigatório!");
+        String nomeAluno = txtNomeAluno.getText().trim();
+        if (nomeAluno.isEmpty()){
+            JOptionPane.showMessageDialog(Tela, "Nome do Aluno é obrigatório!");
             return;
         }
         
-        try {
-            
-            Long idTreino = Long.parseLong(idTreinoStr.trim());
-            List<Treino> treinos = new TreinoRepositorio().listarTreinoAluno(idTreino);            
+        try {           
+            List<Treino> treinos = new TreinoRepositorio().listarTreinoAlunoPorNome(nomeAluno);            
 
             if (treinos.isEmpty()){
-                JOptionPane.showMessageDialog(Tela, "Nenhum treino encontrado para o Aluno ID " + idTreino);
-            } else {   
+                JOptionPane.showMessageDialog(Tela, "Sem treino para o nome: " + nomeAluno);
+            } else {    
                 for (Treino treino : treinos) {
                     Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
                     if (alunos != null) {
@@ -58,12 +61,11 @@ public class ListarTreinoPorAluno {
                     }
                 }
             }
+
             
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(Tela, "ID inválido. Por favor, digite apenas números.");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(Tela, "Erro ao carregar treino: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
 }
