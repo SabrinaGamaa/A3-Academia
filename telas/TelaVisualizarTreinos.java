@@ -4,6 +4,8 @@
  */
 package telas;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -21,108 +23,132 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
   
     public void listarTreinoPorId(DefaultTableModel modelo){
         modelo.setRowCount(0); // Limpa linhas antigas
+        
+        String idTreinoStr = txtIdTreino.getText();
+        if (idTreinoStr.isEmpty()){
+            JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
+            return;
+        }
+               
         try {
-            String idTreino = txtIdTreino.getText();
-            if (idTreino.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
-                return;
-            }
-            Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
+            
+            Long idTreino = Long.parseLong(idTreinoStr.trim());
+            Treino treino = new TreinoRepositorio().buscarTreinoPorId(idTreino);
 
             if (treino == null){
-                throw new Exception("ID Treino não encontrado.");
+                JOptionPane.showMessageDialog(this, "ID Treino" + idTreino + " não encontrado.");
+                
+            } else {
+                Aluno aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
+                modelo.addRow(new Object[] {
+                    treino.getId(),
+                    treino.getAlunoId(),
+                    aluno.getNome(),
+                    treino.getTipoTreino(),
+                    treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                    treino.getDescricao()
+                });
             }
-            
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                    
-            modelo.addRow(new Object[] {
-                treino.getId(),
-                treino.getAlunoId(),
-                aluno.getNome(),
-                treino.getTipoTreino(),
-                treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                treino.getDescricao()
-            });
              
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "ID treino não encontrado no banco de dados.");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID Treino inválido. Por favor, digite apenas números.");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-            e.printStackTrace();
         }
     }
     
     public final void listarTreinosPorIdAluno(DefaultTableModel modelo){       
-        modelo.setRowCount(0); // Limpa linhas antigas       
+        modelo.setRowCount(0); 
+        
+        String idTreinoStr = txtIdAluno.getText();
+        
+        if (idTreinoStr.isEmpty()){
+            JOptionPane.showMessageDialog(this, "ID do Aluno é obrigatório!");
+            return;
+        }
+        
         try {
-            String idTreino = txtIdAluno.getText();
-            if (idTreino.isEmpty()){
-                throw new Exception("ID do Aluno é obrigatório!");
-            }
             
-            List<Treino> treinos = new TreinoRepositorio().listarTreinoAluno(Long.parseLong(idTreino));            
+            Long idTreino = Long.parseLong(idTreinoStr.trim());
+            List<Treino> treinos = new TreinoRepositorio().listarTreinoAluno(idTreino);            
 
-            if (treinos == null){
-                throw new Exception("ID Aluno sem treinos.");
+            if (treinos.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Nenhum treino encontrado para o Aluno ID " + idTreino);
+            } else {   
+                for (Treino treino : treinos) {
+                    Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
+                    if (alunos != null) {
+                        modelo.addRow(new Object[] {
+                            treino.getId(),
+                            treino.getAlunoId(),
+                            alunos.getNome(),
+                            treino.getTipoTreino(),
+                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                            treino.getDescricao()
+                        });
+                    }
+                    else {
+                        modelo.addRow(new Object[] {
+                            treino.getId(),
+                            treino.getAlunoId(),
+                            "Aluno Desconhecido",
+                            treino.getTipoTreino(),
+                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                            treino.getDescricao()
+                        });
+                    }
+                }
             }
             
-             
-            for (Treino treino : treinos) {
-                Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                if (alunos != null) {
-                    modelo.addRow(new Object[] {
-                        treino.getId(),
-                        treino.getAlunoId(),
-                        alunos.getNome(),
-                        treino.getTipoTreino(),
-                        treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                        String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                        treino.getDescricao()
-                    });
-                }
-                else {
-                    throw new Exception("ID aluno não encontrado.");
-                }
-            }
-
-            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, digite apenas números.");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar treino: " + e.getMessage());
-            e.printStackTrace();
         }
     }
     
     public final void listarTreinosPorNome(DefaultTableModel modelo){       
         modelo.setRowCount(0); // Limpa linhas antigas       
-        try {
-            String nomeAluno = txtNomeAluno.getText();
-            if (nomeAluno.isEmpty()){
-                throw new Exception("Nome do Aluno é obrigatório!");
-            }
-            
+        
+        String nomeAluno = txtNomeAluno.getText().trim();
+        if (nomeAluno.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Nome do Aluno é obrigatório!");
+            return;
+        }
+        
+        try {           
             List<Treino> treinos = new TreinoRepositorio().listarTreinoAlunoPorNome(nomeAluno);            
 
-            if (treinos == null){
-                throw new Exception("Sem treino para o nome: " + nomeAluno);
-            }
-            
-             
-            for (Treino treino : treinos) {
-                Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                if (alunos != null) {
-                    modelo.addRow(new Object[] {
-                        treino.getId(),
-                        treino.getAlunoId(),
-                        alunos.getNome(),
-                        treino.getTipoTreino(),
-                        treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                        String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                        treino.getDescricao()
-                    });
-                }
-                else {
-                    throw new Exception("ID aluno não encontrado.");
+            if (treinos.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Sem treino para o nome: " + nomeAluno);
+            } else {    
+                for (Treino treino : treinos) {
+                    Aluno alunos = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
+                    if (alunos != null) {
+                        modelo.addRow(new Object[] {
+                            treino.getId(),
+                            treino.getAlunoId(),
+                            alunos.getNome(),
+                            treino.getTipoTreino(),
+                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                            treino.getDescricao()
+                        });
+                    }
+                    else {
+                        modelo.addRow(new Object[] {
+                            treino.getId(),
+                            treino.getAlunoId(),
+                            "Aluno Desconhecido",
+                            treino.getTipoTreino(),
+                            treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                            String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                            treino.getDescricao()
+                        });
+                    }
                 }
             }
 
@@ -137,10 +163,12 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
      * Creates new form TelaVisualizarAlunos
      */
     public TelaVisualizarTreinos() {      
-        initComponents();
+        initComponents();       
         TelaCadastrarTreino telaCadastrarTreino = new TelaCadastrarTreino();
         DefaultTableModel modelo = telaCadastrarTreino.TelaV(tabelaTreinos);
         telaCadastrarTreino.listarTreinos(modelo);
+        
+        
     }
 
     /**
