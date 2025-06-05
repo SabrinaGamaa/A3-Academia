@@ -406,17 +406,6 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
         String descricao = txtDescricao.getText();
         String duracao = txtDuracao.getText();
 
-        if (alunoId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "ID do aluno é obrigatório!");
-            return;
-        }
-        long alunoIdLong = Long.parseLong(alunoId);
-        Aluno aluno = new AlunoRepositorio().listarAlunoPorId(alunoIdLong);
-        if (aluno == null) {
-            JOptionPane.showMessageDialog(this, "Aluno com ID " + alunoId + " não encontrado!");
-            return;
-        }
-
         try {
             CadastrarTreino.cadastrarTreino(alunoId, tipoTreino, descricao, duracao);
             JOptionPane.showMessageDialog(this, "Treino para o ID aluno " + alunoId + " cadastrado com sucesso!");
