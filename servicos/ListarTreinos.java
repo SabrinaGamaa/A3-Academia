@@ -4,10 +4,8 @@
  */
 package servicos;
 
-import java.awt.Component;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
 import modelos.Treino;
@@ -19,7 +17,7 @@ import repositorio.TreinoRepositorio;
  * @author Sabrina Gama
  */
 public class ListarTreinos {
-    public void listar(Component Tela, DefaultTableModel modelo){       
+    public void listar(DefaultTableModel modelo){       
         modelo.setRowCount(0); // Limpa linhas antigas
         try {
 
@@ -42,7 +40,7 @@ public class ListarTreinos {
                     modelo.addRow(new Object[] {
                         treino.getId(),
                         treino.getAlunoId(),
-                        null,
+                        "Aluno Desconhecido",
                         treino.getTipoTreino(),
                         treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                         String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
@@ -53,8 +51,7 @@ public class ListarTreinos {
 
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(Tela, "Erro ao carregar treino: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao carregar treino: " + e.getMessage());
         }
     }
 }

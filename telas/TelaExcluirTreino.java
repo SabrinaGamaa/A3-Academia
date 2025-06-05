@@ -28,8 +28,57 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
      */
     public TelaExcluirTreino() {
         initComponents();
+        
+        tabelaTreinos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int linhaSelecionada = tabelaTreinos.getSelectedRow();
+                if (linhaSelecionada >= 0) {
+                    int colunas = tabelaTreinos.getColumnCount();
+                    
+                    String[] dadosLinha = new String[colunas];
+                    
+                    for (int i = 0; i < colunas; i ++){
+                        String dados = tabelaTreinos.getValueAt(linhaSelecionada, i).toString();
+                        dadosLinha[i] = (dados != null) ? dados : "";
+                    }
+                    
+                    txtIdTreino.setText(dadosLinha[0]);
+                    
+                    txtIdAluno.setText(dadosLinha[1]);
+
+                    txtTipoTreino.setText(dadosLinha[3]);
+
+                    txtDataInicio.setText(dadosLinha[4]);
+
+                    String[] duracaoStr = dadosLinha[5].split(" ");
+                    String duracao = duracaoStr[0];
+                    txtDuracao.setText(duracao);
+ 
+                    txtDescricao.setText(dadosLinha[6]);
+                }
+            }
+        });
+        
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);
+        limparCamposAluno();
+        listarTreinos.listar(modelo);
+    }
+    
+    private void limparCamposAluno() {
+        txtIdTreino.setText("");
+        txtIdAluno.setText("");
+        txtTipoTreino.setText("");
+        txtDuracao.setText("");
+        txtDataInicio.setText("");
+        txtDescricao.setText("");
+        txtIdAluno.setEnabled(true);
+        txtIdTreino.setEnabled(true);
+        txtIdAluno.setEnabled(true);
+        txtTipoTreino.setEnabled(true);
+        txtDuracao.setEnabled(true);
+        txtDataInicio.setEnabled(true);
+        txtDescricao.setEnabled(true);
     }
     
 
@@ -406,45 +455,37 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
     
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         try {
-            String idTreino = txtIdTreino.getText();
-            if (idTreino.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
-                return;
-            }
-
-            Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
-
-            if (treino == null){
-                throw new Exception("ID Treino não encontrado.");
-            }
-
-            long idAlunoAtual = treino.getAlunoId();
-            txtIdAluno.setText(String.valueOf(idAlunoAtual));
-            txtIdAluno.setEnabled(false);
-
-            txtDescricao.setText(treino.getDescricao());
-            txtDescricao.setEnabled(false);
-
-            txtTipoTreino.setText(treino.getTipoTreino());
-            txtTipoTreino.setEnabled(false);
-
-            String dur = String.valueOf(treino.getDuracao().toMinutes());
-            txtDuracao.setText(dur);
-            txtDuracao.setEnabled(false);
-
-            LocalDateTime data = treino.getDataInicio();
-            String dataStr= data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-            txtDataInicio.setText(dataStr);
-            txtDataInicio.setEnabled(false);
-            
             DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
- 
-            ListarTreinoPorId listarTreinoPorId = new ListarTreinoPorId();
-            listarTreinoPorId.listarTreino(this, modelo, txtIdTreino);
+            String idTreino = txtIdTreino.getText();
+            
+
+           Treino treino = new ListarTreinoPorId().listarTreino(modelo, txtIdTreino);
+
+            if (treino != null){
+            
+                txtIdAluno.setText(String.valueOf(treino.getAlunoId()));
+                txtIdAluno.setEnabled(false);
+
+                txtDescricao.setText(treino.getDescricao());
+                txtDescricao.setEnabled(false);
+
+                txtTipoTreino.setText(treino.getTipoTreino());
+                txtTipoTreino.setEnabled(false);
+
+                String dur = String.valueOf(treino.getDuracao().toMinutes());
+                txtDuracao.setText(dur);
+                txtDuracao.setEnabled(false);
+
+                LocalDateTime data = treino.getDataInicio();
+                String dataStr= data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                txtDataInicio.setText(dataStr);
+                txtDataInicio.setEnabled(false);             
+            }
             
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            limparCamposAluno();
         }
 
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -452,49 +493,33 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
     
     private void excluirTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirTreinoActionPerformed
         try {
-            String idTreino = txtIdTreino.getText();
+            String idTreino = txtIdTreino.getText();           
             int linhaSelecionada = tabelaTreinos.getSelectedRow();
+            Treino treino = null;
+            Aluno aluno = null;
             
             if (idTreino.isEmpty() && linhaSelecionada == -1){
                 JOptionPane.showMessageDialog(this, "Digite o ID do Treino ou selecione a linha para excluir o treino.");
+                limparCamposAluno();
                 return;
             }
             
-            if (!idTreino.isEmpty()) {
-                Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
-                if (treino == null){
-                    throw new Exception("ID Treino não encontrado.");
-                } else {
-                    Aluno alunoNome = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir treino de " + alunoNome.getNome() + treino.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
-
-                    if (opcao == JOptionPane.YES_OPTION) {
-                        TreinoRepositorio treinoEx = new TreinoRepositorio();
-                        treinoEx.deletarTreino(treino.getId());
-                        JOptionPane.showMessageDialog(null, "Treino excluido com sucesso!");
-                    }
-                }
-            }
-            
-            if (linhaSelecionada >= 0) {
-                String idTreinoLinha = tabelaTreinos.getValueAt(linhaSelecionada, 0).toString();
-                Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreinoLinha));
-                if (treino == null){
-                    throw new Exception("ID Treino não encontrado.");
-                } else {
-                    Aluno alunoNome = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir treino de " + alunoNome.getNome() + treino.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
-
-                    if (opcao == JOptionPane.YES_OPTION) {
-                        TreinoRepositorio treinoEx = new TreinoRepositorio();
-                        treinoEx.deletarTreino(treino.getId());
-                        JOptionPane.showMessageDialog(null, "Treino excluido com sucesso!");
-                    }
-                }
-            }
-            
             DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-            listarTreinos.listar(this, modelo);
+
+            if (!idTreino.isEmpty()){                
+                treino = new ListarTreinoPorId().listarTreino(modelo, txtIdTreino);                
+            } 
+            
+            aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
+                
+                
+            int opcao = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir treino de " + aluno.getNome() + treino.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
+            if (opcao == JOptionPane.YES_OPTION) {
+                new TreinoRepositorio().deletarTreino(treino.getId());
+                JOptionPane.showMessageDialog(null, "Treino excluido com sucesso!");
+            }
+            limparCamposAluno();
+            listarTreinos.listar(modelo);
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -504,7 +529,8 @@ public class TelaExcluirTreino extends javax.swing.JFrame {
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);
+        limparCamposAluno();
+        listarTreinos.listar(modelo);
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed

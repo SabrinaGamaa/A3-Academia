@@ -4,6 +4,7 @@
  */
 package telas;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import servicos.ListarAlunoPorNome;
 import servicos.ListarAlunos;
@@ -24,7 +25,7 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
         initComponents();
         ListarAlunos listarAlunos = new ListarAlunos();
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-        listarAlunos.carregarAlunos(this, modelo);
+        listarAlunos.carregarAlunos(modelo);
         
     }
 
@@ -375,23 +376,31 @@ public class TelaVisualizarAlunos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnListarAlunoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarAlunoNomeActionPerformed
-        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos); 
-        ListarAlunoPorNome listarAlunoPorNome = new ListarAlunoPorNome();
-        listarAlunoPorNome.listarAlunosPorNome(this, modelo, txtListarAlunoNome);
+        try {
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos); 
+            ListarAlunoPorNome listarAlunoPorNome = new ListarAlunoPorNome();
+            listarAlunoPorNome.listarAlunosPorNome(modelo, txtListarAlunoNome);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
         
     }//GEN-LAST:event_btnListarAlunoNomeActionPerformed
 
     private void btnBurcarAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarAlunoIdActionPerformed
-        DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos); 
-        BuscarAlunoPorId busAlunoPorId = new BuscarAlunoPorId();
-        busAlunoPorId.buscarAlunoId(this, modelo, txtBuscarAlunoId);
+        try {
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos); 
+            BuscarAlunoPorId busAlunoPorId = new BuscarAlunoPorId();
+            busAlunoPorId.buscarAlunoId(modelo, txtBuscarAlunoId);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
                 
     }//GEN-LAST:event_btnBurcarAlunoIdActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);   
         ListarAlunos listarAlunos = new ListarAlunos();
-        listarAlunos.carregarAlunos(this, modelo);
+        listarAlunos.carregarAlunos(modelo);
 
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 

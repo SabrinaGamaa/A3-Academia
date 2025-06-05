@@ -23,7 +23,7 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
     public TelaCadastrarAluno() {
         initComponents();
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-        listarAlunos.carregarAlunos(this, modelo);
+        listarAlunos.carregarAlunos(modelo);
     }
     
     
@@ -388,7 +388,7 @@ public class TelaCadastrarAluno extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!");
             
             DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-            listarAlunos.carregarAlunos(this, modelo);
+            listarAlunos.carregarAlunos(modelo);
             
         }
         catch (Exception e) {

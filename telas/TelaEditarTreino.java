@@ -62,7 +62,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
         
         
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);
+        listarTreinos.listar(modelo);
       
     }
     
@@ -435,17 +435,8 @@ public class TelaEditarTreino extends javax.swing.JFrame {
     
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         try {
-            String idTreino = txtIdTreino.getText();
-            if (idTreino.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do treino é obrigatório!");
-                return;
-            }
-
-            Treino treino = new TreinoRepositorio().buscarTreinoPorId(Long.parseLong(idTreino));
-
-            if (treino == null){
-                throw new Exception("ID Treino não encontrado.");
-            }
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+            Treino treino = new ListarTreinoPorId().listarTreino(modelo, txtIdTreino);
 
             long idAlunoAtual = treino.getAlunoId();
             txtIdAluno.setText(String.valueOf(idAlunoAtual));
@@ -466,12 +457,8 @@ public class TelaEditarTreino extends javax.swing.JFrame {
             txtDataInicio.setText(dataStr);
             txtDataInicio.setEnabled(true);
             
-            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-            listarTreinos.listar(this, modelo);
-            
-            ListarTreinoPorId listarTreinoPorId = new ListarTreinoPorId();
-            listarTreinoPorId.listarTreino(this, modelo, txtIdTreino);
-            
+            listarTreinos.listar(modelo);
+                      
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
@@ -497,7 +484,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Treino ID " + treino.getId() + " editado com sucesso!");   
             
             DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-            listarTreinos.listar(this, modelo);
+            listarTreinos.listar(modelo);
             
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -509,7 +496,7 @@ public class TelaEditarTreino extends javax.swing.JFrame {
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);
+        listarTreinos.listar(modelo);
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed

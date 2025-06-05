@@ -19,15 +19,68 @@ import servicos.ModeloTabela;
  * @author Sabrina Gama
  */
 public class TelaExcluirAluno extends javax.swing.JFrame {
+
     ListarAlunos listarAlunos = new ListarAlunos();
     ModeloTabela modeloTabela = new ModeloTabela();
+
     /**
      * Creates new form TelaCadastrarAluno
      */
     public TelaExcluirAluno() {
         initComponents();
+
+        tabelaAlunos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int linhaSelecionada = tabelaAlunos.getSelectedRow();
+                if (linhaSelecionada >= 0) {
+                    int colunas = tabelaAlunos.getColumnCount();
+
+                    String[] dadosLinha = new String[colunas];
+
+                    for (int i = 0; i < colunas; i++) {
+                        String dados = tabelaAlunos.getValueAt(linhaSelecionada, i).toString();
+                        dadosLinha[i] = (dados != null) ? dados : "";
+                    }
+
+                    txtIdAluno.setText(dadosLinha[0]);
+                    
+                    txtNome.setText(dadosLinha[1]);
+                    txtNome.setEnabled(false);
+
+                    txtCPF.setText(dadosLinha[2]);
+                    txtCPF.setEnabled(false);
+
+                    txtDataNascimento.setText(dadosLinha[3]);
+                    txtDataNascimento.setEnabled(false);
+
+                    txtTelefone.setText(dadosLinha[5]);
+                    txtTelefone.setEnabled(false);
+
+                    txtEmail.setText(dadosLinha[6]);
+                    txtEmail.setEnabled(false);
+                }
+            }
+        });
+
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-        listarAlunos.carregarAlunos(this, modelo);
+        limparCamposAluno();
+        listarAlunos.carregarAlunos(modelo);
+    }
+
+    private void limparCamposAluno() {
+        txtIdAluno.setText("");
+        txtNome.setText("");
+        txtCPF.setText("");
+        txtTelefone.setText("");
+        txtEmail.setText("");
+        txtDataNascimento.setText("");
+        txtIdAluno.setEnabled(true);
+        txtNome.setEnabled(true);
+        txtCPF.setEnabled(true);
+        txtTelefone.setEnabled(true);
+        txtEmail.setEnabled(true);
+        txtDataNascimento.setEnabled(true);
     }
 
     /**
@@ -83,7 +136,7 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("EXCLUIR ALUNO");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 15))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Excluir Aluno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 15))); // NOI18N
         jPanel2.setPreferredSize(new java.awt.Dimension(315, 411));
 
         txtIdAluno.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -408,41 +461,38 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
 
     private void btnBuscarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarAlunoActionPerformed
         try {
-            String idStr = txtIdAluno.getText();
-            if (idStr.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do aluno é obrigatório!");
-                return;
-            }
-
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
-
-            if (aluno == null){
-                throw new Exception("ID Aluno não encontrado.");
-            }
-
-            txtNome.setText(aluno.getNome());
-            txtNome.setEnabled(false);
-
-            txtCPF.setText(aluno.getCpf());
-            txtCPF.setEnabled(false);
-
-            txtTelefone.setText(aluno.getTelefone());
-            txtTelefone.setEnabled(false);
-
-            txtEmail.setText(aluno.getEmail());
-            txtEmail.setEnabled(false);
-
-            LocalDate dataNasc = aluno.getDataNascimento();
-            String dataStr= dataNasc.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            txtDataNascimento.setText(dataStr);
-            txtDataNascimento.setEnabled(false);
-            
             DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+
             BuscarAlunoPorId buscarAluno = new BuscarAlunoPorId();
-            buscarAluno.buscarAlunoId(this, modelo, txtIdAluno);
+            buscarAluno.buscarAlunoId(modelo, txtIdAluno);
+
+            String idStr = txtIdAluno.getText();
+            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr.trim()));
+
+            if (aluno != null) {
+                txtNome.setText(aluno.getNome());
+                txtNome.setEnabled(false);
+
+                txtCPF.setText(aluno.getCpf());
+                txtCPF.setEnabled(false);
+
+                txtTelefone.setText(aluno.getTelefone());
+                txtTelefone.setEnabled(false);
+
+                txtEmail.setText(aluno.getEmail());
+                txtEmail.setEnabled(false);
+
+                LocalDate dataNasc = aluno.getDataNascimento();
+                String dataStr = dataNasc.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                txtDataNascimento.setText(dataStr);
+                txtDataNascimento.setEnabled(false);
+            } else {
+                limparCamposAluno();
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            limparCamposAluno();
         }
     }//GEN-LAST:event_btnBuscarAlunoActionPerformed
 
@@ -452,62 +502,41 @@ public class TelaExcluirAluno extends javax.swing.JFrame {
 
     private void excluirAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirAlunoActionPerformed
         try {
-                       
             int linhaSelecionada = tabelaAlunos.getSelectedRow();
             String idStr = txtIdAluno.getText();
-            if (idStr.isEmpty() && linhaSelecionada == -1){
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
+            Aluno aluno = null;
+            
+            if (idStr.isEmpty() && linhaSelecionada == -1) {
                 JOptionPane.showMessageDialog(this, "Digite o ID do aluno ou selecione a linha para excluir o aluno.");
                 return;
             }
-            
+
+
             if (!idStr.isEmpty()) {
-                Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
-
-                if (aluno == null){
-                    throw new Exception("ID Aluno não encontrado.");
-
-                } else {
-                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir " + aluno.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
-
-                    if (opcao == JOptionPane.YES_OPTION) {
-                        AlunoRepositorio alunoEx = new AlunoRepositorio();
-                        alunoEx.deletarAluno(aluno.getId());
-                        JOptionPane.showMessageDialog(null, "Aluno excluido com sucesso!");
-                    }
-                }
+                aluno = new BuscarAlunoPorId().buscarAlunoId(modelo, txtIdAluno);
             }
             
-            if (linhaSelecionada >= 0) {
-                String idStrLinha = tabelaAlunos.getValueAt(linhaSelecionada, 0).toString();
-                Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStrLinha));
-                
-                if (aluno == null){
-                    throw new Exception("ID Aluno não encontrado.");
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir " + aluno.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
 
-                } else {
-                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir " + aluno.toString(), "Confirmação", JOptionPane.YES_NO_OPTION);
-
-                    if (opcao == JOptionPane.YES_OPTION) {
-                        AlunoRepositorio alunoEx = new AlunoRepositorio();
-                        alunoEx.deletarAluno(aluno.getId());
-                        JOptionPane.showMessageDialog(null, "Aluno excluido com sucesso!");
-                    }
-                }
-            }
-
-
-            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-            listarAlunos.carregarAlunos(this, modelo);
+            if (opcao == JOptionPane.YES_OPTION) {
+                new AlunoRepositorio().deletarAluno(aluno.getId());
+                JOptionPane.showMessageDialog(null, "Aluno excluido com sucesso!");
+            } 
+ 
+            limparCamposAluno();
+            listarAlunos.carregarAlunos(modelo);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-        
+
     }//GEN-LAST:event_excluirAlunoActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-        listarAlunos.carregarAlunos(this, modelo);
+        limparCamposAluno();
+        listarAlunos.carregarAlunos(modelo);
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed

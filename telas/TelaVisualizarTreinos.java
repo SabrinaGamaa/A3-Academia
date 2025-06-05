@@ -4,6 +4,7 @@
  */
 package telas;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import servicos.ListarTreinoPorAluno;
 import servicos.ListarTreinoPorId;
@@ -24,7 +25,7 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
     public TelaVisualizarTreinos() {      
         initComponents();       
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);              
+        listarTreinos.listar(modelo);              
     }
 
     /**
@@ -421,18 +422,24 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnListarTreinoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarTreinoNomeActionPerformed
-        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        
-        ListarTreinoPorNome listarTreinoPorNome = new ListarTreinoPorNome();
-        listarTreinoPorNome.listarTreinosPorNome(this, modelo, txtNomeAluno);
+        try {
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);       
+            ListarTreinoPorNome listarTreinoPorNome = new ListarTreinoPorNome();
+            listarTreinoPorNome.listarTreinosPorNome(this, modelo, txtNomeAluno);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
         
     }//GEN-LAST:event_btnListarTreinoNomeActionPerformed
 
     private void btnBurcarAlunoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarAlunoIdActionPerformed
-        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        
-        ListarTreinoPorAluno listarTreinoPorAluno = new ListarTreinoPorAluno();
-        listarTreinoPorAluno.listarTreinosPorIdAluno(this, modelo, txtIdAluno);
+        try {
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);        
+            ListarTreinoPorAluno listarTreinoPorAluno = new ListarTreinoPorAluno();
+            listarTreinoPorAluno.listarTreinosPorIdAluno(this, modelo, txtIdAluno);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_btnBurcarAlunoIdActionPerformed
 
     private void btnInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicialActionPerformed
@@ -441,9 +448,15 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInicialActionPerformed
 
     private void btnBurcarTreinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBurcarTreinoActionPerformed
-        DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        ListarTreinoPorId listarTreinoPorId = new ListarTreinoPorId();
-        listarTreinoPorId.listarTreino(this, modelo, txtIdTreino);
+        try {
+        
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
+            ListarTreinoPorId listarTreinoPorId = new ListarTreinoPorId();
+            listarTreinoPorId.listarTreino(modelo, txtIdTreino);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
         
     }//GEN-LAST:event_btnBurcarTreinoActionPerformed
 
@@ -497,7 +510,7 @@ public class TelaVisualizarTreinos extends javax.swing.JFrame {
 
     private void btnVoltarInicial1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicial1ActionPerformed
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);
+        listarTreinos.listar(modelo);
     }//GEN-LAST:event_btnVoltarInicial1ActionPerformed
 
     /**

@@ -4,9 +4,7 @@
  */
 package servicos;
 
-import java.awt.Component;
 import java.time.format.DateTimeFormatter;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import modelos.Aluno;
@@ -19,13 +17,12 @@ import repositorio.TreinoRepositorio;
  * @author Sabrina Gama
  */
 public class ListarTreinoPorId {
-    public void listarTreino(Component Tela, DefaultTableModel modelo, JTextField txtIdTreino) {
+    public Treino listarTreino(DefaultTableModel modelo, JTextField txtIdTreino) {
         modelo.setRowCount(0); // Limpa linhas antigas
 
         String idTreinoStr = txtIdTreino.getText();
         if (idTreinoStr.isEmpty()) {
-            JOptionPane.showMessageDialog(Tela, "ID do treino é obrigatório!");
-            return;
+            throw new IllegalArgumentException("ID do treino é obrigatório!");
         }
 
         try {
@@ -34,25 +31,40 @@ public class ListarTreinoPorId {
             Treino treino = new TreinoRepositorio().buscarTreinoPorId(idTreino);
 
             if (treino == null) {
-                JOptionPane.showMessageDialog(Tela, "ID Treino" + idTreino + " não encontrado.");
+                throw new IllegalArgumentException("ID Treino" + idTreino + " não encontrado.");
 
             } else {
                 Aluno aluno = new AlunoRepositorio().listarAlunoPorId(treino.getAlunoId());
-                modelo.addRow(new Object[]{
-                    treino.getId(),
-                    treino.getAlunoId(),
-                    aluno.getNome(),
-                    treino.getTipoTreino(),
-                    treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                    String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
-                    treino.getDescricao()
-                });
+                if (aluno == null) {
+                    modelo.addRow(new Object[]{
+                        treino.getId(),
+                        treino.getAlunoId(),
+                        "Aluno Desconhecido",
+                        treino.getTipoTreino(),
+                        treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                        treino.getDescricao()
+                    });
+                } else {
+                    modelo.addRow(new Object[]{
+                        treino.getId(),
+                        treino.getAlunoId(),
+                        aluno.getNome(),
+                        treino.getTipoTreino(),
+                        treino.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        String.valueOf(treino.getDuracao().toMinutes() + " minutos"),
+                        treino.getDescricao()
+                    });
+                }
+                return treino;
             }
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(Tela, "ID Treino inválido. Por favor, digite apenas números.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(Tela, "Erro ao carregar treino: " + e.getMessage());
+            throw new IllegalArgumentException("ID Treino inválido. Por favor, digite apenas números.");
+        } catch (IllegalArgumentException e)  {
+            throw e;
+        }catch (Exception e) {
+            throw new IllegalArgumentException("Erro ao carregar treino: " + e.getMessage());
         }
     }
 }

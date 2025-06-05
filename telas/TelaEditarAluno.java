@@ -58,7 +58,7 @@ public class TelaEditarAluno extends javax.swing.JFrame {
         });
 
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-        listarAlunos.carregarAlunos(this, modelo);
+        listarAlunos.carregarAlunos(modelo);
     }
 
     /**
@@ -428,39 +428,28 @@ public class TelaEditarAluno extends javax.swing.JFrame {
 
     private void btnBuscarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarAlunoActionPerformed
         try {
-            String idStr = txtIdAluno.getText();
-            if (idStr.isEmpty()){
-                JOptionPane.showMessageDialog(this, "ID do aluno é obrigatório!");
-                return;
+            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);            
+            Aluno aluno = new BuscarAlunoPorId().buscarAlunoId(modelo, txtIdAluno);
+
+            if (aluno != null){
+                
+                txtNome.setText(aluno.getNome());
+                txtNome.setEnabled(true);
+
+                txtCPF.setText(aluno.getCpf());
+                txtCPF.setEnabled(true);
+
+                txtTelefone.setText(aluno.getTelefone());
+                txtTelefone.setEnabled(true);
+
+                txtEmail.setText(aluno.getEmail());
+                txtEmail.setEnabled(true);
+
+                LocalDate dataNasc = aluno.getDataNascimento();
+                String dataStr= dataNasc.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                txtDataNascimento.setText(dataStr);
+                txtDataNascimento.setEnabled(true);
             }
-
-            Aluno aluno = new AlunoRepositorio().listarAlunoPorId(Long.parseLong(idStr));
-
-            if (aluno == null){
-                throw new Exception("ID Aluno não encontrado.");
-            }
-
-            txtNome.setText(aluno.getNome());
-            txtNome.setEnabled(true);
-
-            txtCPF.setText(aluno.getCpf());
-            txtCPF.setEnabled(true);
-
-            txtTelefone.setText(aluno.getTelefone());
-            txtTelefone.setEnabled(true);
-
-            txtEmail.setText(aluno.getEmail());
-            txtEmail.setEnabled(true);
-
-            LocalDate dataNasc = aluno.getDataNascimento();
-            String dataStr= dataNasc.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            txtDataNascimento.setText(dataStr);
-            txtDataNascimento.setEnabled(true);
-            
-            DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-            
-            BuscarAlunoPorId buscarAlunoPorId = new BuscarAlunoPorId();
-            buscarAlunoPorId.buscarAlunoId(this, modelo, txtIdAluno);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -490,19 +479,16 @@ public class TelaEditarAluno extends javax.swing.JFrame {
 
             DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
             BuscarAlunoPorId buscarAlunoPorId = new BuscarAlunoPorId();
-            buscarAlunoPorId.buscarAlunoId(this, modelo, txtIdAluno);
+            buscarAlunoPorId.buscarAlunoId(modelo, txtIdAluno);
             
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro : " + e.getMessage());
         }
     }//GEN-LAST:event_editarAlunoActionPerformed
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaAlunos);
-        listarAlunos.carregarAlunos(this, modelo);
+        listarAlunos.carregarAlunos(modelo);
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
     private void menuCadastrarAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastrarAlunoActionPerformed

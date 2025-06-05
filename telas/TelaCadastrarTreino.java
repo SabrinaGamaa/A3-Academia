@@ -38,7 +38,7 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
     public TelaCadastrarTreino() {
         initComponents();
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);
+        listarTreinos.listar(modelo);
         carregarData();
     }
     
@@ -396,7 +396,7 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
 
     private void btnVoltarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicialActionPerformed
         DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-        listarTreinos.listar(this, modelo);
+        listarTreinos.listar(modelo);
         carregarData();
     }//GEN-LAST:event_btnVoltarInicialActionPerformed
 
@@ -411,7 +411,7 @@ public class TelaCadastrarTreino extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Treino para o ID aluno " + alunoId + " cadastrado com sucesso!");
             
             DefaultTableModel modelo = modeloTabela.TelaV(tabelaTreinos);
-            listarTreinos.listar(this, modelo);
+            listarTreinos.listar(modelo);
             
         }
         catch (Exception e) {
