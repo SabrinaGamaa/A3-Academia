@@ -235,7 +235,7 @@ public class TreinoRepositorio {
             return mudanca > 0;
 
         } catch (SQLException e) {
-            System.out.println("Erro ao deletar Treino: " + e.getMessage());
+            System.out.println("Erro ao deletar Treino do Aluno: " + e.getMessage());
             return false;
         }
     }
