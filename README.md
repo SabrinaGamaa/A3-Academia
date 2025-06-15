@@ -179,7 +179,7 @@ O projeto também foi desenvolvido e testado inicialmente no IntelliJ IDEA, onde
 
 ## 👩‍💻 Autoria
 
-> Projeto desenvolvido por [**Sabrina Gama**](https://github.com/SabrinaGamaa), [**Vicenzzo Palma**](https://github.com/vicenzzopalma), **Raquel**, **Kauan** e **Paulo Henrique Oliveira de Carvalho** como parte da disciplina A3 - 1º semestre de ADS.
+> Projeto desenvolvido por [**Sabrina Gama**](https://github.com/SabrinaGamaa), [**Vicenzzo Palma**](https://github.com/vicenzzopalma), **Raquel**, **Kauan** e [**Paulo H. Oliveira**](https://github.com/PauloHOC818) como parte da disciplina A3 - 1º semestre de ADS.
 
 ---
 
