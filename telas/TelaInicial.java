@@ -5,17 +5,24 @@
 package telas;
 
 
+import repositorio.AlunoRepositorio;
+import repositorio.TreinoRepositorio;
+
 /**
  *
  * @author Sabrina Gama
  */
 public class TelaInicial extends javax.swing.JFrame {
+    AlunoRepositorio alunoRepositorio = new AlunoRepositorio();
+    TreinoRepositorio treinoRepositorio = new TreinoRepositorio();
 
     /**
      * Creates new form TelaInicial
      */
     public TelaInicial() {
         initComponents();
+        alunoRepositorio.criarTabelaAluno();
+        treinoRepositorio.criarTabelaTreino();
     }
 
     /**
