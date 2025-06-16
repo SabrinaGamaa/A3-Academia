@@ -71,20 +71,40 @@ Criar um sistema com as funcionalidades de **cadastro, consulta, atualização e
 
 ---
 
-## 🗄️ Estrutura do Banco de Dados (SQLite)
+## 🗄️ Script SQL para Criação do Banco de Dados
 
-O sistema utiliza um banco de dados local SQLite, gerenciado via JDBC, com duas tabelas principais:
+```sql
+"CREATE TABLE IF NOT EXISTS Aluno (" +
+   "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+   "nome TEXT NOT NULL," +
+   "cpf TEXT NOT NULL," +
+   "data_nascimento TEXT NOT NULL," +
+   "telefone TEXT," +
+   "email TEXT" +
+   ");";
+
+"CREATE TABLE IF NOT EXISTS Treino (" +
+   "id_treino INTEGER PRIMARY KEY AUTOINCREMENT," +
+   "aluno_id INTEGER NOT NULL," +
+   "tipo_treino TEXT NOT NULL," +
+   "descricao TEXT NOT NULL," +
+   "duracao TEXT NOT NULL," +
+   "data_inicio TEXT NOT NULL," +
+   "FOREIGN KEY (aluno_id) REFERENCES Aluno(id)" +
+   ");";
+```
+
 
 ### 📋 Tabela: `Aluno`
 
-| Campo            | Tipo        | Descrição                                           |
-|------------------|-------------|-----------------------------------------------------|
-| `id`             | INTEGER     | Identificador único do aluno (PK, auto-incremento) |
-| `nome`           | TEXT        | Nome completo do aluno                             |
-| `cpf`            | TEXT        | CPF do aluno                                       |
-| `data_nascimento`| DATE        | Data de nascimento do aluno (dd/MM/yyyy)           |
-| `telefone`       | TEXT        | Telefone para contato                              |
-| `email`          | TEXT        | E-mail do aluno                                    |
+| Campo            | Tipo    | Descrição                                           |
+|------------------|---------|-----------------------------------------------------|
+| `id`             | INTEGER | Identificador único do aluno (PK, auto-incremento) |
+| `nome`           | TEXT    | Nome completo do aluno                             |
+| `cpf`            | TEXT    | CPF do aluno                                       |
+| `data_nascimento`| TEXT    | Data de nascimento do aluno (dd/MM/yyyy)           |
+| `telefone`       | TEXT    | Telefone para contato                              |
+| `email`          | TEXT    | E-mail do aluno                                    |
 
 ---
 
@@ -110,7 +130,6 @@ Ou seja, é uma relação **1:N (Aluno → Treinos)**.
 - O banco de dados é criado automaticamente em tempo de execução na pasta `database/` (arquivo `bancodados.db`).
 - As tabelas são geradas se não existirem (`CREATE TABLE IF NOT EXISTS`).
 - A conexão é feita utilizando a biblioteca [`sqlite-jdbc`](https://github.com/xerial/sqlite-jdbc).
-
 
 ---
 
