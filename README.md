@@ -1,6 +1,6 @@
 # 💪 Sistema de Gerenciamento de Academia - A3 (Java + SQLite)
 
-Este projeto foi desenvolvido como parte da **Avaliação A3** da disciplina de Programação, no **primeiro semestre da faculdade de Análise e Desenvolvimento de Sistemas**, com o objetivo de criar um sistema completo de gerenciamento de alunos e seus treinos em uma academia.
+Este projeto foi desenvolvido como parte da **Avaliação A3** da disciplina de Programação de soluções computacionais, com o objetivo de criar um sistema completo de gerenciamento de alunos e seus treinos em uma academia.
 
 > ⚠️ Trabalho em grupo com 5 integrantes.
 
@@ -44,10 +44,11 @@ Criar um sistema com as funcionalidades de **cadastro, consulta, atualização e
 
 ## 🛠 Tecnologias Utilizadas
 
-- **Java JDK 22**
+- **Java OpenJDK 21.0.6**
 - **NetBeans 20** (interface gráfica via GUI builder)
 - **IntelliJ IDEA** (desenvolvimento inicial em linha de comando)
 - **SQLite** (banco de dados local)
+- **SQLite JDBC 3.36.0.3**
 - **JDBC** (conexão Java + SQL)
 - **Maven** (gerenciador de dependências)
 - **Git & GitHub** (controle de versão)
@@ -126,13 +127,13 @@ Ou seja, é uma relação **1:N (Aluno → Treinos)**.
 ## 📌 Dificuldades e Soluções
 
 ### 1. **Migração de Ambiente**
-> O projeto começou no IntelliJ, mas foi migrado para o NetBeans para facilitar a construção visual da interface via GUI Builder. Isso exigiu adaptação para Maven e reestruturação do diretório.
+> O projeto foi iniciado no IntelliJ IDEA em linha de comando e depois migrado para o NetBeans, aproveitando o GUI Builder para desenvolvimento da interface. Foi necessário adaptar o projeto para Maven e reorganizar os diretórios.
 
-### 2. **Integração da Interface com Banco**
-> Trabalhoso vincular os botões e campos da interface aos métodos de acesso a banco de dados. Criei camadas bem separadas (Model, DAO, Serviço e GUI) para facilitar a manutenção e reutilização.
+### 2. **Integração da Interface com o Banco de Dados**
+> O maior desafio foi conectar os componentes da interface gráfica com os métodos de acesso ao banco de dados (DAO). Foi criada uma arquitetura separando bem as camadas: Model → DAO → Serviço → Interface (Swing). Criei camadas bem separadas (Model, DAO, Serviço e GUI) para facilitar a manutenção e reutilização.
 
 ### 3. **Tratamento de Erros**
-> Ainda em fase final. Os erros mais críticos estão tratados com mensagens amigáveis ao usuário via `JOptionPane`. Há planos para centralizar exceções em uma classe utilitária futura.
+> Implementado tratamento básico de erros, exibindo mensagens amigáveis ao usuário através do JOptionPane. Planeja-se futuramente criar uma classe centralizadora de exceções.
 
 ---
 
@@ -141,14 +142,20 @@ Ou seja, é uma relação **1:N (Aluno → Treinos)**.
 ## ▷ Como Executar
 
 1. Clone o projeto:
+
+   Intellij:
     ```bash
     git clone https://github.com/SabrinaGamaa/A3-Academia.git
+    ```
+   NetBeans:
+   ```bash
+    git clone https://github.com/SabrinaGamaa/A3-Academia-NetBeans.git
     ```
    
 2. Abra no NetBeans ou IntelliJ
 
     - No NetBeans, abra como projeto Maven
-    - No IntelliJ, importe como projeto Maven e selecione JDK 22
+    - No IntelliJ, importe como projeto Maven e selecione JDK 21
 
    
 3. Execute a classe TelaInicial.java ou qualquer JFrame desejado
@@ -163,7 +170,7 @@ Ou seja, é uma relação **1:N (Aluno → Treinos)**.
 O projeto também foi desenvolvido e testado inicialmente no IntelliJ IDEA, onde:
 
 - A dependência `sqlite-jdbc` versão `3.36.0.3` foi adicionada manualmente via **External Libraries**.
-- Por isso, **não há arquivo `pom.xml` no projeto original do IntelliJ**, mas a versão migrada para o NetBeans já utiliza o Maven com essa dependência corretamente configurada.
+- Por isso, **não há arquivo `pom.xml` no projeto original do IntelliJ**, mas a versão migrada para o NetBeans já utiliza o Maven com essa dependência corretamente configurada na versão `3.43.2.2`.
 
 
 
@@ -171,7 +178,7 @@ O projeto também foi desenvolvido e testado inicialmente no IntelliJ IDEA, onde
 
 ## 🔧 Pré-requisitos
 
-- Java JDK 22 instalado
+- Java JDK 21 instalado
 - NetBeans 20 (ou IntelliJ com suporte a Maven)
 - Git instalado (opcional)
 
@@ -179,7 +186,14 @@ O projeto também foi desenvolvido e testado inicialmente no IntelliJ IDEA, onde
 
 ## 👩‍💻 Autoria
 
-> Projeto desenvolvido por [**Sabrina Gama**](https://github.com/SabrinaGamaa), [**Vicenzzo Palma**](https://github.com/vicenzzopalma), **Raquel**, **Kauan** e [**Paulo H. Oliveira**](https://github.com/PauloHOC818) como parte da disciplina A3 - 1º semestre de ADS.
+Projeto desenvolvido por 
+ - [**Sabrina Gama**](https://github.com/SabrinaGamaa)
+ - [**Vicenzzo Palma**](https://github.com/vicenzzopalma)
+ - [**Raquel Silva**](https://github.com/RaquelSillva)
+ - [**Paulo H. Oliveira**](https://github.com/PauloHOC818)
+ - **Kauan** 
+
+> como parte da disciplina A3 - 1º semestre de Programação de Soluções Computacionais.
 
 ---
 
