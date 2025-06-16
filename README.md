@@ -210,7 +210,7 @@ Projeto desenvolvido por
  - [**Vicenzzo Palma**](https://github.com/vicenzzopalma)
  - [**Raquel Silva**](https://github.com/RaquelSillva)
  - [**Paulo H. Oliveira**](https://github.com/PauloHOC818)
- - **Kauan** 
+ - [**Kauan**](https://github.com/akauanj)
 
 > como parte da disciplina A3 - 1º semestre de Programação de Soluções Computacionais.
 
